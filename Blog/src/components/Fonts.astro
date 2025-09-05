@@ -1,9 +1,8 @@
 ---
-import { getUrl } from '../utils/url';
-
+// Use static paths for fonts to avoid build-time warnings
 const fonts = {
-    regular: getUrl('/fonts/atkinson-regular.woff'),
-    bold: getUrl('/fonts/atkinson-bold.woff')
+    regular: '/fonts/atkinson-regular.woff',
+    bold: '/fonts/atkinson-bold.woff'
 };
 ---
 
@@ -11,14 +10,14 @@ const fonts = {
 <style is:global>
     @font-face {
         font-family: 'Atkinson';
-        src: url('{fonts.regular}') format('woff');
+        src: url('/fonts/atkinson-regular.woff') format('woff');
         font-weight: 400;
         font-style: normal;
         font-display: swap;
     }
     @font-face {
         font-family: 'Atkinson';
-        src: url('{fonts.bold}') format('woff');
+        src: url('/fonts/atkinson-bold.woff') format('woff');
         font-weight: 700;
         font-style: normal;
         font-display: swap;
@@ -26,5 +25,5 @@ const fonts = {
 </style>
 
 <!-- Preload font files -->
-<link rel="preload" href={fonts.regular} as="font" type="font/woff" crossorigin />
-<link rel="preload" href={fonts.bold} as="font" type="font/woff" crossorigin /> 
+<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin /> 
