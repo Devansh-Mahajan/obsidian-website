@@ -42,4 +42,20 @@ const blog = defineCollection({
 	}),
 });
 
-export const collections = { blog };
+// A flexible collection for Study Notes synced from the Obsidian vault.
+// Frontmatter is optional to accommodate plain markdown notes.
+const notes = defineCollection({
+	loader: glob({ base: './src/content/notes', pattern: '**/*.md' }),
+	schema: z.object({
+		// All fields optional to avoid rejecting plain notes without frontmatter
+		title: z.string().optional().nullable(),
+		description: z.string().optional().nullable(),
+		publish: z.boolean().default(true),
+		created_date: dateSchema.optional().nullable(),
+		updated_date: dateSchema.optional().nullable(),
+		tags: z.array(z.string()).default([]).nullable(),
+		no_index: z.boolean().default(false),
+	}),
+});
+
+export const collections = { blog, notes };

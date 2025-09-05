@@ -1,0 +1,37 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+    const notes = await getCollection('notes');
+    return notes.map((note) => {
+        const slug = note.data.slug || note.id.replace(/\.[^/.]+$/, '');
+        return {
+            params: { slug },
+            props: note,
+        };
+    });
+}
+
+type Props = CollectionEntry<'notes'>;
+
+const note: Props = Astro.props as Props;
+const computedTitle = note.data.title || note.id.split('/').pop()?.replace(/-/g, ' ').replace(/_/g, ' ') || 'Note';
+const computedDescription = note.data.description || 'Study note';
+const { Content } = await render(note);
+---
+
+<BlogPost
+    {...{
+        title: computedTitle,
+        description: computedDescription,
+        created_date: note.data.created_date ?? null,
+        updated_date: note.data.updated_date ?? null,
+        tags: note.data.tags ?? [],
+        publish: note.data.publish ?? true,
+        no_index: note.data.no_index ?? false,
+    }}
+>
+    <Content />
+    </BlogPost>
+
