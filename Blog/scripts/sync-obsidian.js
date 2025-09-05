@@ -151,7 +151,7 @@ async function syncObsidianPosts() {
 
         // 2) Notes: copy only specified folders from vault root, excluding Blog folder
         const VAULT_INCLUDE_PREFIXES = [
-            '200', '300', '700', '800', '998'
+            '200', '300', '500', '700', '800', '998'
         ];
         const EXCLUDE_NAMES = new Set(['Blog', 'node_modules', '.git', '.obsidian', 'Welcome.md']);
 
