@@ -1,0 +1,32 @@
+# Quartz temporary files
+quartz-temp/
+
+# Node modules
+node_modules/
+
+# Build outputs
+dist/
+.astro/
+.output/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Cache
+.cache/
+.npm/
+.yarn/
