@@ -149,9 +149,9 @@ async function syncObsidianPosts() {
         const markdownFiles = await findMarkdownFiles(PROJECT_ROOT);
         await Promise.all(markdownFiles.map(processMarkdownFile));
 
-        // 2) Notes: copy all markdown files from vault root (000–999), excluding Blog folder
+        // 2) Notes: copy only specified folders from vault root, excluding Blog folder
         const VAULT_INCLUDE_PREFIXES = [
-            '000', '100', '200', '300', '400', '500', '600', '700', '800', '900', '998', '999'
+            '200', '300', '700', '800', '998'
         ];
         const EXCLUDE_NAMES = new Set(['Blog', 'node_modules', '.git', '.obsidian']);
 
@@ -179,7 +179,7 @@ async function syncObsidianPosts() {
             return files;
         }
 
-        // Find all attachment files (images, PDFs, etc.)
+        // Find all attachment files (images, PDFs, etc.) in specified folders only
         async function findVaultAttachments(dir) {
             const entries = await fs.readdir(dir, { withFileTypes: true });
             let files = [];
@@ -189,6 +189,7 @@ async function syncObsidianPosts() {
                 if (entry.isDirectory()) {
                     const isRootLevel = path.dirname(relFromVault) === '';
                     if (isRootLevel) {
+                        // Only include specified folders
                         const allowed = VAULT_INCLUDE_PREFIXES.some(prefix => entry.name.startsWith(prefix));
                         if (!allowed || EXCLUDE_NAMES.has(entry.name) || entry.name.startsWith('.')) continue;
                     } else {
@@ -210,17 +211,10 @@ async function syncObsidianPosts() {
         const vaultMarkdownFiles = await findVaultMarkdown(VAULT_ROOT);
 
         // Build a lookup for wikilinks: basename -> dest relative path (first unique match wins)
-        function stripNumericPrefix(name) {
-            return name.replace(/^\d+\s*/u, '').trim();
-        }
-
         function computeDestRelative(srcFullPath) {
             const relFromVault = path.relative(VAULT_ROOT, srcFullPath);
-            const parts = relFromVault.split(path.sep);
-            if (parts.length > 1) {
-                parts[0] = stripNumericPrefix(parts[0]);
-            }
-            return parts.join('/');
+            // Keep the full Obsidian structure including numbers
+            return relFromVault.replace(/\\/g, '/');
         }
 
         const basenameToRel = new Map();
@@ -274,16 +268,13 @@ async function syncObsidianPosts() {
         await Promise.all(
             vaultAttachmentFiles.map(async (srcPath) => {
                 const relFromVault = path.relative(VAULT_ROOT, srcPath);
-                const parts = relFromVault.split(path.sep);
-                if (parts.length > 1) {
-                    parts[0] = stripNumericPrefix(parts[0]);
-                }
-                const destRel = parts.join('/');
+                // Keep the full Obsidian structure including numbers
+                const destRel = relFromVault.replace(/\\/g, '/');
                 const destPath = path.join(ATTACHMENTS_DIR, destRel);
                 await fs.mkdir(path.dirname(destPath), { recursive: true });
                 await fs.copyFile(srcPath, destPath);
                 const fileName = path.basename(srcPath);
-                attachmentMap.set(fileName, destRel.replace(/\\/g, '/'));
+                attachmentMap.set(fileName, destRel);
                 console.log(`📎 Copied attachment ${path.relative(VAULT_ROOT, srcPath)} → attachments/${destRel}`);
             })
         );

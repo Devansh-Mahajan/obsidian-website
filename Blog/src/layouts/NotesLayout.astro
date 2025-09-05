@@ -139,17 +139,40 @@ const breadcrumbs = breadcrumbFrom(currentPath);
                 gap: 0.4rem; 
             }
             
-            .folder-btn { 
-                background: transparent; 
-                border: none; 
-                cursor: pointer; 
-                padding: 0.25rem; 
-                border-radius: 0.4rem; 
+            .folder-arrow {
                 color: var(--obsidian-text-secondary);
+                font-size: 0.8rem;
+                transition: transform 0.2s ease;
+                cursor: pointer;
+                user-select: none;
             }
             
-            .folder-btn:hover {
+            details[open] .folder-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .folder-name {
+                color: var(--obsidian-text-secondary);
+                cursor: pointer;
+            }
+            
+            summary {
+                cursor: pointer;
+                list-style: none;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                padding: 0.25rem 0.35rem;
+                border-radius: 0.4rem;
+                transition: all 0.2s ease;
+            }
+            
+            summary:hover {
                 background: var(--obsidian-hover);
+            }
+            
+            summary::-webkit-details-marker {
+                display: none;
             }
             
             .link { 
@@ -386,8 +409,8 @@ const breadcrumbs = breadcrumbFrom(currentPath);
                                 {hasChildren ? (
                                     <details open>
                                         <summary class="folder">
-                                            <button class="folder-btn" aria-label="Toggle folder">▸</button>
-                                            {label}
+                                            <span class="folder-arrow">▸</span>
+                                            <span class="folder-name">{label}</span>
                                         </summary>
                                         <ul class="tree">
                                             {sortKeys(node.children!).map((k) => {
