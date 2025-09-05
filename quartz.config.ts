@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
+    pageTitle: "Dash's Study Notes",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -23,32 +23,32 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Schibsted Grotesk",
-        body: "Source Sans Pro",
-        code: "IBM Plex Mono",
+        header: "JetBrains Mono",
+        body: "JetBrains Mono",
+        code: "JetBrains Mono",
       },
       colors: {
         lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
+          light: "#ffffff",
+          lightgray: "#f5f5f5",
+          gray: "#d0d0d0",
+          darkgray: "#666666",
+          dark: "#333333",
+          secondary: "#ff6b6b",
+          tertiary: "#ffa726",
+          highlight: "rgba(255, 107, 107, 0.15)",
+          textHighlight: "#fff3cd",
         },
         darkMode: {
-          light: "#161618",
-          lightgray: "#393639",
-          gray: "#646464",
-          darkgray: "#d4d4d4",
-          dark: "#ebebec",
-          secondary: "#7b97aa",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#b3aa0288",
+          light: "#1a1a1a",        // dark background like in image
+          lightgray: "#2d2d2d",    // slightly lighter dark
+          gray: "#404040",         // medium grey
+          darkgray: "#e0e0e0",     // light text
+          dark: "#ffffff",         // white text
+          secondary: "#ff6b6b",    // red like headings in image
+          tertiary: "#ffa726",     // orange like accents in image
+          highlight: "rgba(255, 107, 107, 0.15)", // red highlight
+          textHighlight: "#fff3cd", // light orange highlight
         },
       },
     },

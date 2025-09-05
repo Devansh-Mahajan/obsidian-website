@@ -1,0 +1,157 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const title = `Contact - ${SITE_TITLE}`;
+const description = "Get in touch with us for any questions or concerns.";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="contact-container">
+				<div class="contact-content">
+					<h1>Contact</h1>
+					<p class="contact-intro">
+						I'm always interested in connecting with fellow students, researchers, and professionals in computer science and mathematics.
+					</p>
+					
+					<div class="contact-methods">
+						<div class="contact-method">
+							<h3>Email</h3>
+							<p>For academic inquiries, research collaboration, or general questions:</p>
+							<a href="mailto:devansh.mahajan@student.ethz.ch" class="contact-link">
+								devansh.mahajan@student.ethz.ch
+							</a>
+						</div>
+						
+						<div class="contact-method">
+							<h3>LinkedIn</h3>
+							<p>Connect with me professionally:</p>
+							<a href="https://www.linkedin.com/in/devansh-mahajan-2b2b99185/" target="_blank" class="contact-link">
+								linkedin.com/in/devansh-mahajan-2b2b99185
+							</a>
+						</div>
+						
+						<div class="contact-method">
+							<h3>GitHub</h3>
+							<p>Check out my coding projects:</p>
+							<a href="https://github.com/Devansh-Mahajan" target="_blank" class="contact-link">
+								github.com/Devansh-Mahajan
+							</a>
+						</div>
+					</div>
+					
+					<div class="contact-note">
+						<p>
+							<strong>Note:</strong> I'm currently a Computer Science student at ETH Zurich, so I may not be able to respond immediately during exam periods or heavy coursework periods.
+						</p>
+					</div>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.contact-container {
+		min-height: calc(100vh - 16rem);
+		padding: 4rem 2rem;
+	}
+
+	.contact-content {
+		max-width: 720px;
+		margin: 0 auto;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+		color: rgb(var(--black));
+		font-family: var(--font-heading);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.contact-intro {
+		font-size: 1.1rem;
+		color: rgb(var(--gray-dark));
+		margin-bottom: 2.5rem;
+		line-height: 1.6;
+	}
+
+	.contact-methods {
+		display: grid;
+		gap: 2rem;
+		margin-bottom: 2.5rem;
+	}
+
+	.contact-method {
+		padding: 1.5rem;
+		background: rgb(var(--gray-light));
+		border-radius: 0.75rem;
+		border: 1px solid rgba(var(--gray), 0.1);
+	}
+
+	.contact-method h3 {
+		font-size: 1.25rem;
+		margin-bottom: 0.5rem;
+		color: rgb(var(--black));
+		font-family: var(--font-heading);
+		font-weight: 600;
+	}
+
+	.contact-method p {
+		color: rgb(var(--gray-dark));
+		margin-bottom: 0.75rem;
+		line-height: 1.5;
+	}
+
+	.contact-link {
+		display: inline-block;
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 500;
+		padding: 0.5rem 1rem;
+		background: rgba(var(--accent-rgb), 0.1);
+		border-radius: 0.5rem;
+		transition: all 0.2s ease;
+	}
+
+	.contact-link:hover {
+		background: rgba(var(--accent-rgb), 0.15);
+		transform: translateY(-1px);
+	}
+
+	.contact-note {
+		padding: 1rem;
+		background: rgba(var(--accent-rgb), 0.05);
+		border-left: 3px solid var(--accent);
+		border-radius: 0.5rem;
+	}
+
+	.contact-note p {
+		margin: 0;
+		color: rgb(var(--gray-dark));
+		font-size: 0.9rem;
+		line-height: 1.5;
+	}
+
+	@media (max-width: 768px) {
+		.contact-container {
+			padding: 2rem 1rem;
+		}
+
+		h1 {
+			font-size: 2rem;
+		}
+	}
+</style> 

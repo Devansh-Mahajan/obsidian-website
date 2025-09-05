@@ -1,0 +1,506 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import { getUrl } from '../utils/url';
+
+const posts = (await getCollection('blog'))
+    .filter(post => post.data.publish)
+    .sort((a, b) => {
+        const dateA = a.data.created_date?.valueOf() ?? 0;
+        const dateB = b.data.created_date?.valueOf() ?? 0;
+        return dateB - dateA;
+    })
+    .slice(0, 3);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- Hero Section -->
+			<section class="hero">
+				<div class="hero-content">
+					<div class="hero-badge">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+						</svg>
+						Computer Science Student
+					</div>
+					<h1 class="name-blue">Devansh Mahajan</h1>
+					<p class="hero-description">
+						Passionate about algorithms, mathematics, and technology. Currently pursuing Computer Science at ETH Zürich, 
+						where I explore the intersection of theory and practice through rigorous study and hands-on projects.
+					</p>
+					<div class="cta-buttons">
+						<a href="http://localhost:8080" target="_blank" class="primary-button">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+								<polyline points="14,2 14,8 20,8"/>
+								<line x1="16" y1="13" x2="8" y2="13"/>
+								<line x1="16" y1="17" x2="8" y2="17"/>
+								<polyline points="10,9 9,9 8,9"/>
+							</svg>
+							Explore Study Notes
+						</a>
+						<a href={getUrl('/blog')} class="secondary-button">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+								<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+							</svg>
+							Read Blog Posts
+						</a>
+					</div>
+				</div>
+			</section>
+
+			<!-- Areas of Focus -->
+			<section class="areas-focus">
+				<div class="areas-content">
+					<h2>Areas of Focus</h2>
+					<p class="areas-description">Core competencies and research interests in computer science and technology.</p>
+					<div class="areas-grid">
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M12 2L2 7l10 5 10-5-10-5z"/>
+										<path d="M2 17l10 5 10-5"/>
+										<path d="M2 12l10 5 10-5"/>
+									</svg>
+								</div>
+								<h3>Algorithms & Data Structures</h3>
+							</div>
+							<p>Exploring efficient solutions to complex computational problems through rigorous algorithmic thinking and optimization techniques.</p>
+						</div>
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M3 3h18v18H3zM9 9h6v6H9z"/>
+										<path d="M9 1v6M15 1v6M9 17v6M15 17v6M1 9h6M17 9h6M1 15h6M17 15h6"/>
+									</svg>
+								</div>
+								<h3>Mathematics</h3>
+							</div>
+							<p>Deepening understanding of mathematical foundations, from discrete mathematics to advanced calculus and linear algebra.</p>
+						</div>
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<circle cx="12" cy="12" r="3"/>
+										<path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+										<path d="M20.2 20.2L16.5 16.5M7.5 7.5L3.8 3.8M20.2 3.8L16.5 7.5M7.5 16.5L3.8 20.2"/>
+									</svg>
+								</div>
+								<h3>Machine Learning & AI</h3>
+							</div>
+							<p>Developing intelligent systems and exploring the frontiers of artificial intelligence, neural networks, and data science.</p>
+						</div>
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+										<line x1="8" y1="21" x2="16" y2="21"/>
+										<line x1="12" y1="17" x2="12" y2="21"/>
+									</svg>
+								</div>
+								<h3>Software Engineering</h3>
+							</div>
+							<p>Building robust, scalable systems and exploring modern development practices, architecture patterns, and technologies.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Latest Posts -->
+			<section class="latest-posts">
+				<div class="posts-content">
+					<h2>Latest Posts</h2>
+					<p class="posts-description">Recent thoughts and insights from my journey in computer science and technology.</p>
+					<div class="post-grid">
+						{posts.map((post) => (
+							<BlogCard
+								title={post.data.title}
+								description={post.data.description}
+								date={post.data.created_date}
+								slug={post.id}
+							/>
+						))}
+					</div>
+					<div class="view-all">
+						<a href={getUrl('/blog')} class="secondary-button">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M5 12h14m-7-7 7 7-7 7"/>
+							</svg>
+							View All Posts
+						</a>
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main {
+		max-width: 100%;
+		padding: 0;
+	}
+
+	.hero {
+		padding: 8rem 1rem;
+		text-align: center;
+		background: transparent;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.hero::before {
+		content: '';
+		position: absolute;
+		top: -50%;
+		left: -50%;
+		width: 200%;
+		height: 200%;
+		background: radial-gradient(
+			circle at center,
+			rgba(var(--accent), 0.08) 0%,
+			rgba(var(--accent), 0.03) 25%,
+			transparent 50%
+		);
+		z-index: -1;
+	}
+
+	.hero-content {
+		max-width: 800px;
+		margin: 0 auto;
+		position: relative;
+	}
+
+	.hero-badge {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		background: rgba(var(--accent), 0.1);
+		color: var(--accent);
+		border-radius: 2rem;
+		font-size: 0.875rem;
+		font-weight: 500;
+		margin-bottom: 2rem;
+		transition: var(--theme-transition);
+	}
+
+	.hero h1 {
+		font-size: 3.5rem;
+		font-weight: 700;
+		margin-bottom: 1.5rem;
+		color: rgb(var(--black));
+		line-height: 1.1;
+		letter-spacing: -0.02em;
+	}
+
+	.name-blue {
+		background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.hero-description {
+		font-size: 1.25rem;
+		color: rgb(var(--gray));
+		max-width: 600px;
+		margin: 0 auto 3rem;
+		line-height: 1.6;
+	}
+
+	.cta-buttons {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.primary-button, .secondary-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 1rem 2rem;
+		border-radius: 0.75rem;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		font-size: 1rem;
+		border: 2px solid transparent;
+	}
+
+	.primary-button {
+		background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+		color: white !important;
+		box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3) !important;
+	}
+
+	.primary-button:hover {
+		transform: translateY(-2px) !important;
+		box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
+		background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+		color: white !important;
+	}
+
+	.secondary-button {
+		background: transparent;
+		color: rgb(var(--black));
+		border-color: rgba(var(--black), 0.2);
+	}
+
+	.secondary-button:hover {
+		background: rgba(var(--black), 0.05);
+		border-color: rgba(var(--black), 0.3);
+		transform: translateY(-2px);
+	}
+
+	.primary-button svg, .secondary-button svg {
+		opacity: 0.8;
+	}
+
+	.areas-focus {
+		padding: 6rem 1rem;
+		background: linear-gradient(135deg, rgba(248, 250, 252, 0.5), rgba(241, 245, 249, 0.3));
+	}
+
+	.areas-content {
+		max-width: 1200px;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	.areas-focus h2 {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+		color: rgb(var(--black));
+		font-family: var(--font-heading);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.areas-description {
+		font-size: 1.125rem;
+		color: rgb(var(--gray));
+		margin-bottom: 2rem;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.areas-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.5rem;
+		margin-top: 2rem;
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.area-card {
+		background: rgba(255, 255, 255, 0.9);
+		padding: 1.5rem;
+		border-radius: 0.75rem;
+		text-align: left;
+		box-shadow: 0 4px 6px rgba(59, 130, 246, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+		border: 1px solid rgba(59, 130, 246, 0.1);
+		transition: all 0.2s ease;
+		backdrop-filter: blur(10px);
+	}
+
+	.area-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+		border-color: rgba(59, 130, 246, 0.3);
+		background: rgba(255, 255, 255, 0.95);
+	}
+
+	/* Dark mode styling for areas of focus */
+	[data-theme='dark'] .areas-focus {
+		background: rgba(var(--gray-light), 0.3);
+	}
+
+	[data-theme='dark'] .area-card {
+		background: rgb(var(--card-bg));
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		border: 1px solid rgba(var(--gray), 0.1);
+	}
+
+	[data-theme='dark'] .area-card:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		border-color: rgba(var(--accent), 0.2);
+		background: rgb(var(--card-bg));
+	}
+
+	[data-theme='dark'] .area-icon {
+		background: rgba(var(--accent), 0.1);
+		color: var(--accent);
+	}
+
+	.area-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1rem;
+	}
+
+	.area-icon {
+		width: 40px;
+		height: 40px;
+		background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #3b82f6;
+		flex-shrink: 0;
+	}
+
+	.area-card h3 {
+		font-size: 1.1rem;
+		margin: 0;
+		color: rgb(var(--black));
+		font-family: var(--font-heading);
+		font-weight: 600;
+	}
+
+	.area-card p {
+		color: rgb(var(--gray));
+		line-height: 1.6;
+		margin: 0;
+		font-size: 0.9rem;
+	}
+
+	.latest-posts {
+		padding: 6rem 1rem;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.posts-content {
+		text-align: center;
+	}
+
+	.latest-posts h2 {
+		font-size: 2.5rem;
+		margin-bottom: 1rem;
+		color: rgb(var(--black));
+		font-family: var(--font-heading);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.posts-description {
+		font-size: 1.125rem;
+		color: rgb(var(--gray));
+		margin-bottom: 3rem;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.post-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 2rem;
+		margin-bottom: 3rem;
+	}
+
+	.view-all {
+		text-align: center;
+	}
+
+	.secondary-button {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		border-radius: 0.5rem;
+		font-weight: 500;
+		text-decoration: none;
+		transition: all 0.3s ease;
+		font-size: 0.9rem;
+		border: 1px solid rgba(var(--black), 0.2);
+		background: transparent;
+		color: rgb(var(--black));
+	}
+
+	.secondary-button:hover {
+		background: rgba(var(--black), 0.05);
+		border-color: rgba(var(--black), 0.3);
+		transform: translateY(-1px);
+	}
+
+	.secondary-button svg {
+		opacity: 0.8;
+	}
+
+	@media (max-width: 768px) {
+		.hero {
+			padding: 4rem 1rem;
+		}
+
+		.hero h1 {
+			font-size: 2.5rem;
+		}
+
+		.hero-description {
+			font-size: 1.1rem;
+		}
+
+		.cta-buttons {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.primary-button, .secondary-button {
+			justify-content: center;
+		}
+
+		.areas-focus {
+			padding: 4rem 1rem;
+		}
+
+		.areas-focus h2 {
+			font-size: 2rem;
+		}
+
+		.areas-grid {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+			max-width: 100%;
+		}
+
+		.area-card {
+			padding: 1.25rem;
+		}
+
+		.latest-posts {
+			padding: 4rem 1rem;
+		}
+
+		.post-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+
+		.view-all {
+			margin-top: 1.5rem;
+		}
+	}
+</style>

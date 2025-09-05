@@ -1,0 +1,57 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import NotesLayout from '../../layouts/NotesLayout.astro';
+
+export async function getStaticPaths() {
+    const notes = await getCollection('notes');
+    // Only generate paths for notes that exist and are published
+    return notes
+        .filter(note => note.data.publish !== false)
+        .map((note) => {
+            const slug = note.data.slug || note.id.replace(/\.[^/.]+$/, '');
+            return {
+                params: { slug },
+                props: note,
+            };
+        });
+}
+
+type Props = CollectionEntry<'notes'>;
+
+const note: Props = Astro.props as Props;
+const computedTitle = note.data.title || note.id.split('/').pop()?.replace(/-/g, ' ').replace(/_/g, ' ') || 'Note';
+const computedDescription = note.data.description || 'Study note';
+const { Content } = await render(note);
+---
+
+<NotesLayout title={computedTitle} description={computedDescription} currentPath={note.id.replace(/\.[^/.]+$/, '')}>
+    <Content />
+    <hr />
+    <section style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--obsidian-border);">
+        <h3 style="margin: 0 0 1rem 0; color: var(--obsidian-text); font-size: 1.1rem;">Backlinks</h3>
+        <div id="backlinks"></div>
+    </section>
+</NotesLayout>
+
+<script>
+    const container = document.getElementById('backlinks');
+    fetch('/notes-backlinks.json').then(r => r.ok ? r.json() : {}).then(map => {
+        const key = window.location.pathname.replace(/^\/notes\//, '').replace(/\/$/, '');
+        const items = map[key] || [];
+        if (!items.length) { 
+            container.innerHTML = '<p style="color: var(--obsidian-text-secondary); font-style: italic;">No backlinks yet.</p>'; 
+            return; 
+        }
+        container.innerHTML = items.map(i => {
+            // Convert path to URL format matching Astro's slug generation
+            const urlPath = i.path
+                .replace(/\s+/g, '-')
+                .replace(/\+/g, '--')
+                .toLowerCase();
+            return `<div style="margin: 0.5rem 0; padding: 0.5rem; background: var(--obsidian-bg-tertiary); border-radius: 0.5rem; border: 1px solid var(--obsidian-border);"><a class="link" href="/notes/${urlPath}" style="color: var(--obsidian-accent); text-decoration: none; font-weight: 500;">${i.title || i.path}</a></div>`;
+        }).join('');
+    }).catch(() => { 
+        container.innerHTML = '<p style="color: var(--obsidian-text-secondary); font-style: italic;">No backlinks available.</p>'; 
+    });
+</script>
+
