@@ -1,88 +1,53 @@
 # Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+.pnp
+.pnp.js
 
 # Build outputs
 dist/
 .astro/
+.output/
 build/
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
 
 # Logs
 logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
 
-# Coverage directory used by tools like istanbul
-coverage/
-
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variables file
+# Environment variables
 .env
+.env.local
+.env.*.local
 
-# Chromium/Puppeteer files (these cause deployment issues)
-.local-chromium/
-chromium/
-chrome/
-puppeteer/
-
-# Playwright browsers
-playwright/
-
-# Temporary files
-tmp/
-temp/
-
-# Cache directories
+# Local storage of data
 .cache/
-.parcel-cache/
+.npm/
+.yarn/
 
-# Generated content (will be regenerated on build)
+# Generated content by sync script
+public/attachments/
+public/notes-*.json
 src/content/blog/
 src/content/notes/
-public/attachments/
-public/notes-index.json
-public/notes-backlinks.json
+
+# Puppeteer/Chromium files (often large)
+puppeteer/
+chromium/
+.local-chromium/
+
+# Other large or temporary files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.bak
+*.tmp
