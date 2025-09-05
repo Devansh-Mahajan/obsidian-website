@@ -39,5 +39,3 @@ Comprehensive notes and insights from books I've read, covering technology, math
 ---
 
 *This digital garden grows with my learning journey. Feel free to explore and connect ideas through the interconnected web of knowledge.*
-
-<!-- Updated: Removed directories 000, 100, 600, 900, 999 from site navigation -->
