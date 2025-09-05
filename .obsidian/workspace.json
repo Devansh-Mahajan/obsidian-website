@@ -78,9 +78,33 @@
               "icon": "lucide-file",
               "title": "Untitled"
             }
+          },
+          {
+            "id": "692722dabf340958",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "500 Book/Untitled.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Untitled"
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -228,8 +252,10 @@
   },
   "active": "f3d1b0f46aca7cf4",
   "lastOpenFiles": [
-    "300 IMO + Putnam/Tao Book.md",
     "200 ETH Zurich/Untitled.md",
+    "500 Book/Untitled.md",
+    "Untitled",
+    "300 IMO + Putnam/Tao Book.md",
     "Blog/dist/sitemap-index.xml",
     "Blog/dist/sitemap-0.xml",
     "Blog/dist/seo-implementation-guide/index.html",
@@ -239,7 +265,6 @@
     "Blog/dist/git-setup-for-obsidian/index.html",
     "Blog/dist/git-setup-for-obsidian",
     "Blog/dist/obsidian-publishing-guide/index.html",
-    "Blog/dist/obsidian-publishing-guide",
     "Blog/dist/icon.png",
     "Blog/dist/favicon.svg",
     "Blog/src/content/notes/300 IMO + Putnam/Tao Book.md",
@@ -265,7 +290,6 @@
     "01_Daily Notes/2025-02-27.md",
     "01_Daily Notes/2025-03-01.md",
     "05_TAGS/Programming.md",
-    "01_Daily Notes/2025-02-28.md",
     "Pasted image 20240825205117.png",
     "Pasted image 20240825205628.png",
     "Pasted image 20240825222513.png",
