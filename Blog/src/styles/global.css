@@ -8,14 +8,14 @@
  */
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
+	--accent: #3b82f6;
+	--accent-dark: #1d4ed8;
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
-	--gray-light: 246, 248, 250;
+	--gray-light: 248, 250, 252;
 	--gray-dark: 34, 41, 57;
 	/* Light mode gradient from a soft blue-white to pure white */
-	--gray-gradient: rgba(246, 248, 250, 0.8), #f8fafc;
+	--gray-gradient: rgba(248, 250, 252, 0.8), #f8fafc;
 	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
 	
@@ -27,7 +27,7 @@
 	--font-body: 'Onest', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	--font-mono: 'Fira Code', 'SF Mono', Monaco, Consolas, monospace;
 
-	--card-bg: 245, 250, 243;
+	--card-bg: 248, 250, 252;
 }
 
 /* Dark mode variables */

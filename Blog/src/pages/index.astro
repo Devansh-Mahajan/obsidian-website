@@ -275,7 +275,7 @@ const posts = (await getCollection('blog'))
 
 	.areas-focus {
 		padding: 6rem 1rem;
-		background: rgba(var(--gray-light), 0.3);
+		background: linear-gradient(135deg, rgba(248, 250, 252, 0.5), rgba(241, 245, 249, 0.3));
 	}
 
 	.areas-content {
@@ -313,19 +313,21 @@ const posts = (await getCollection('blog'))
 	}
 
 	.area-card {
-		background: rgb(var(--card-bg));
+		background: rgba(255, 255, 255, 0.9);
 		padding: 1.5rem;
 		border-radius: 0.75rem;
 		text-align: left;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-		border: 1px solid rgba(var(--gray), 0.1);
+		box-shadow: 0 4px 6px rgba(59, 130, 246, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+		border: 1px solid rgba(59, 130, 246, 0.1);
 		transition: all 0.2s ease;
+		backdrop-filter: blur(10px);
 	}
 
 	.area-card:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-		border-color: rgba(var(--accent), 0.2);
+		box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+		border-color: rgba(59, 130, 246, 0.3);
+		background: rgba(255, 255, 255, 0.95);
 	}
 
 	.area-header {
@@ -338,12 +340,12 @@ const posts = (await getCollection('blog'))
 	.area-icon {
 		width: 40px;
 		height: 40px;
-		background: rgba(var(--accent), 0.1);
+		background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
 		border-radius: 0.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: var(--accent);
+		color: #3b82f6;
 		flex-shrink: 0;
 	}
 
