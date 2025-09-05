@@ -313,9 +313,12 @@ const posts = (await getCollection('blog'))
 
 	.areas-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		grid-template-columns: repeat(2, 1fr);
 		gap: 1.5rem;
 		margin-top: 2rem;
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	.area-card {
@@ -434,6 +437,7 @@ const posts = (await getCollection('blog'))
 		.areas-grid {
 			grid-template-columns: 1fr;
 			gap: 1rem;
+			max-width: 100%;
 		}
 
 		.area-card {
