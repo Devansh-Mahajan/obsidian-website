@@ -133,7 +133,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "800 Projects/Untitled.md",
+                "file": "999 Templates/Class Template.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -148,7 +148,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "Untitled"
+              "title": "Class Template"
             }
           }
         ],
@@ -300,6 +300,7 @@
   },
   "active": "7d9294db258ba45b",
   "lastOpenFiles": [
+    "800 Projects/Untitled.md",
     "public/postscript.js",
     "public/prescript.js",
     "public/index.css",
@@ -312,14 +313,12 @@
     "content/800 Projects/Untitled.md",
     "content/700 Quant/Untitled.md",
     "700 Quant/Untitled.md",
-    "800 Projects/Untitled.md",
     "500 Book/Untitled.md",
     "content/500 Book/Untitled.md",
     "content/300 IMO + Putnam/Tao Book.md",
     "content/200 ETH Zurich/Untitled.md",
     "content/index.md",
     "content/800 Projects",
-    "content/700 Quant",
     "public/static/og-image.png",
     "public/static/icon.png",
     "node_modules/pixi.js/README.md",
