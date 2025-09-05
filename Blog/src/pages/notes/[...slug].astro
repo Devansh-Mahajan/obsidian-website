@@ -4,13 +4,16 @@ import NotesLayout from '../../layouts/NotesLayout.astro';
 
 export async function getStaticPaths() {
     const notes = await getCollection('notes');
-    return notes.map((note) => {
-        const slug = note.data.slug || note.id.replace(/\.[^/.]+$/, '');
-        return {
-            params: { slug },
-            props: note,
-        };
-    });
+    // Only generate paths for notes that exist and are published
+    return notes
+        .filter(note => note.data.publish !== false)
+        .map((note) => {
+            const slug = note.data.slug || note.id.replace(/\.[^/.]+$/, '');
+            return {
+                params: { slug },
+                props: note,
+            };
+        });
 }
 
 type Props = CollectionEntry<'notes'>;
