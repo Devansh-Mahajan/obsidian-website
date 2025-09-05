@@ -2,19 +2,8 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import BlogCard from '../components/BlogCard.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { getCollection } from 'astro:content';
 import { getUrl } from '../utils/url';
-
-const posts = (await getCollection('blog'))
-    .filter(post => post.data.publish)
-    .sort((a, b) => {
-        const dateA = a.data.created_date?.valueOf() ?? 0;
-        const dateB = b.data.created_date?.valueOf() ?? 0;
-        return dateB - dateA;
-    })
-    .slice(0, 3);
 ---
 
 <!doctype html>
@@ -28,122 +17,87 @@ const posts = (await getCollection('blog'))
 			<!-- Hero Section -->
 			<section class="hero">
 				<div class="hero-content">
-					<div class="hero-badge">
-						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-						</svg>
-						Computer Science Student
+					<div class="hero-left">
+						<h1>Devansh Mahajan</h1>
+						<p class="hero-title">Computer Science Student</p>
+						<div class="social-links">
+							<a href="https://github.com/Devansh-Mahajan" target="_blank" class="social-link">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+								</svg>
+								<span>Devansh-Mahajan</span>
+							</a>
+							<a href="https://www.linkedin.com/in/devansh-mahajan-2b2b99185/" target="_blank" class="social-link">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+									<rect x="2" y="9" width="4" height="12"/>
+									<circle cx="4" cy="4" r="2"/>
+								</svg>
+								<span>devansh-mahajan-2b2b99185</span>
+							</a>
+							<a href="mailto:devansh.mahajan@student.ethz.ch" class="social-link">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+									<polyline points="22,6 12,13 2,6"/>
+								</svg>
+								<span>devansh.mahajan@student.ethz.ch</span>
+							</a>
+						</div>
 					</div>
-					<h1>Devansh Mahajan</h1>
-					<p class="hero-description">
-						Passionate about algorithms, mathematics, and technology. Currently pursuing Computer Science at ETH Zürich, 
-						where I explore the intersection of theory and practice through rigorous study and hands-on projects.
-					</p>
-					<div class="cta-buttons">
-						<a href={getUrl('/notes')} class="primary-button">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-								<polyline points="14,2 14,8 20,8"/>
-								<line x1="16" y1="13" x2="8" y2="13"/>
-								<line x1="16" y1="17" x2="8" y2="17"/>
-								<polyline points="10,9 9,9 8,9"/>
-							</svg>
-							Explore Study Notes
-						</a>
-						<a href={getUrl('/blog')} class="secondary-button">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-								<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-							</svg>
-							Read Blog Posts
-						</a>
+					<div class="hero-right">
+						<div class="about-section">
+							<p>I'm a passionate computer science student and digital craftsman based in Zurich, Switzerland, currently pursuing my studies at <a href="https://ethz.ch" target="_blank" class="link">ETH Zurich</a>.</p>
+							<p>I'm driven by the desire to build high-quality products that make a difference. My focus is on craftsmanship, beautiful design, and continuous improvement in everything I create.</p>
+							<p>Feel free to connect with me on <a href="https://www.linkedin.com/in/devansh-mahajan-2b2b99185/" target="_blank" class="link">LinkedIn</a>, <a href="https://github.com/Devansh-Mahajan" target="_blank" class="link">GitHub</a>, or reach out via email at <a href="mailto:devansh.mahajan@student.ethz.ch" class="link">devansh.mahajan@student.ethz.ch</a>.</p>
+						</div>
 					</div>
 				</div>
 			</section>
 
-			<!-- Areas of Focus -->
-			<section class="areas-focus">
-				<div class="areas-content">
-					<h2>Areas of Focus</h2>
-					<p class="areas-description">Core competencies and research interests in computer science and technology.</p>
-					<div class="areas-grid">
-						<div class="area-card">
-							<div class="area-header">
-								<div class="area-icon">
-									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M12 2L2 7l10 5 10-5-10-5z"/>
-										<path d="M2 17l10 5 10-5"/>
-										<path d="M2 12l10 5 10-5"/>
-									</svg>
-								</div>
-								<h3>Algorithms & Data Structures</h3>
-							</div>
+			<!-- Skills Section -->
+			<section class="skills">
+				<div class="skills-content">
+					<div class="skill-column">
+						<div class="skill-item">
+							<h3>Algorithms & Data Structures</h3>
 							<p>Exploring efficient solutions to complex computational problems through rigorous algorithmic thinking and optimization techniques.</p>
 						</div>
-						<div class="area-card">
-							<div class="area-header">
-								<div class="area-icon">
-									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M3 3h18v18H3zM9 9h6v6H9z"/>
-										<path d="M9 1v6M15 1v6M9 17v6M15 17v6M1 9h6M17 9h6M1 15h6M17 15h6"/>
-									</svg>
-								</div>
-								<h3>Mathematics</h3>
-							</div>
-							<p>Deepening understanding of mathematical foundations, from discrete mathematics to advanced calculus and linear algebra.</p>
-						</div>
-						<div class="area-card">
-							<div class="area-header">
-								<div class="area-icon">
-									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<circle cx="12" cy="12" r="3"/>
-										<path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
-										<path d="M20.2 20.2L16.5 16.5M7.5 7.5L3.8 3.8M20.2 3.8L16.5 7.5M7.5 16.5L3.8 20.2"/>
-									</svg>
-								</div>
-								<h3>Machine Learning & AI</h3>
-							</div>
+						<div class="skill-item">
+							<h3>Machine Learning & AI</h3>
 							<p>Developing intelligent systems and exploring the frontiers of artificial intelligence, neural networks, and data science.</p>
 						</div>
-						<div class="area-card">
-							<div class="area-header">
-								<div class="area-icon">
-									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-										<line x1="8" y1="21" x2="16" y2="21"/>
-										<line x1="12" y1="17" x2="12" y2="21"/>
-									</svg>
-								</div>
-								<h3>Software Engineering</h3>
-							</div>
+					</div>
+					<div class="skill-column">
+						<div class="skill-item">
+							<h3>Mathematics</h3>
+							<p>Deepening understanding of mathematical foundations, from discrete mathematics to advanced calculus and linear algebra.</p>
+						</div>
+						<div class="skill-item">
+							<h3>Software Engineering</h3>
 							<p>Building robust, scalable systems and exploring modern development practices, architecture patterns, and technologies.</p>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<!-- Latest Posts -->
-			<section class="latest-posts">
-				<div class="posts-content">
-					<h2>Latest Posts</h2>
-					<p class="posts-description">Thoughts on technology, learning, and the journey through computer science education.</p>
-					<div class="post-grid">
-						{posts.map((post) => (
-							<BlogCard
-								title={post.data.title}
-								description={post.data.description}
-								date={post.data.created_date}
-								slug={post.id}
-							/>
-						))}
-					</div>
-					<div class="view-all">
-						<a href={getUrl('/blog')} class="secondary-button">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<path d="M5 12h14m-7-7 7 7-7 7"/>
-							</svg>
-							View All Posts
-						</a>
+			<!-- Spaces Section -->
+			<section class="spaces">
+				<div class="spaces-content">
+					<h2>Spaces</h2>
+					<p class="spaces-description">Welcome to my digital spaces! Here you can find different parts of my digital life, from projects, posts and notes.</p>
+					<div class="spaces-grid">
+						<div class="space-card">
+							<h3>Study Notes</h3>
+							<p>A collection of my lecture notes from ETH Zurich on computer science topics, algorithms, data structures, and more.</p>
+						</div>
+						<div class="space-card">
+							<h3>Blog</h3>
+							<p>A collection of my thoughts, experiences, and learnings from my journey as a computer science student.</p>
+						</div>
+						<div class="space-card">
+							<h3>Projects</h3>
+							<p>Showcasing my creations: a collection of projects I've worked on, from coding experiments to design explorations.</p>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -156,305 +110,214 @@ const posts = (await getCollection('blog'))
 	main {
 		max-width: 100%;
 		padding: 0;
+		background: rgb(var(--black));
+		color: rgb(var(--gray-dark));
+		min-height: 100vh;
 	}
 
 	.hero {
-		padding: 8rem 1rem;
-		text-align: center;
-		background: transparent;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.hero::before {
-		content: '';
-		position: absolute;
-		top: -50%;
-		left: -50%;
-		width: 200%;
-		height: 200%;
-		background: radial-gradient(
-			circle at center,
-			rgba(var(--accent), 0.08) 0%,
-			rgba(var(--accent), 0.03) 25%,
-			transparent 50%
-		);
-		z-index: -1;
+		padding: 4rem 2rem;
+		max-width: 1200px;
+		margin: 0 auto;
 	}
 
 	.hero-content {
-		max-width: 800px;
-		margin: 0 auto;
-		position: relative;
-	}
-
-	.hero-badge {
-		display: inline-block;
-		padding: 0.5rem 1rem;
-		background: rgba(var(--accent), 0.1);
-		color: var(--accent);
-		border-radius: 2rem;
-		font-size: 0.875rem;
-		font-weight: 500;
-		margin-bottom: 2rem;
-		transition: var(--theme-transition);
-	}
-
-	.hero h1 {
-		font-size: 4rem;
-		margin-bottom: 1.5rem;
-		line-height: 1.1;
-		color: rgb(var(--black));
-		font-family: var(--font-heading);
-		font-weight: 700;
-		letter-spacing: -0.02em;
-	}
-
-	.gradient-text {
-		background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		color: transparent;
-	}
-
-	.hero-description {
-		font-size: 1.25rem;
-		margin-bottom: 2.5rem;
-		color: rgb(var(--gray));
-		max-width: 600px;
-		margin-left: auto;
-		margin-right: auto;
-		line-height: 1.6;
-	}
-
-	.cta-buttons {
-		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.primary-button, .secondary-button {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.875rem 1.5rem;
-		border-radius: 0.75rem;
-		text-decoration: none;
-		font-weight: 600;
-		transition: all 0.2s ease;
-	}
-
-	.primary-button {
-		background-color: var(--accent);
-		color: white;
-	}
-
-	.primary-button:hover {
-		background-color: var(--accent-dark);
-		transform: translateY(-2px);
-		text-decoration: none;
-	}
-
-	.primary-button svg {
-		transition: transform 0.2s ease;
-	}
-
-	.primary-button:hover svg {
-		transform: translateX(4px);
-	}
-
-	.secondary-button {
-		border: 2px solid rgba(var(--gray), 0.2);
-		color: rgb(var(--gray-dark));
-		background: rgba(var(--gray-light), 0.3);
-	}
-
-	.secondary-button:hover {
-		border-color: rgba(var(--gray), 0.3);
-		background: rgba(var(--gray-light), 0.5);
-		transform: translateY(-2px);
-		text-decoration: none;
-	}
-
-	.secondary-button svg {
-		opacity: 0.8;
-	}
-
-	.areas-focus {
-		padding: 6rem 1rem;
-		background: rgba(var(--gray-light), 0.3);
-	}
-
-	.areas-content {
-		max-width: 1200px;
-		margin: 0 auto;
-		text-align: center;
-	}
-
-	.areas-focus h2 {
-		font-size: 2.5rem;
-		margin-bottom: 1rem;
-		color: rgb(var(--black));
-		font-family: var(--font-heading);
-		font-weight: 700;
-		letter-spacing: -0.02em;
-	}
-
-	.areas-description {
-		font-size: 1.125rem;
-		color: rgb(var(--gray));
-		margin-bottom: 2rem;
-		max-width: 600px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	.areas-grid {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1.5rem;
-		margin-top: 2rem;
-		max-width: 800px;
-		margin-left: auto;
-		margin-right: auto;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
+		align-items: start;
 	}
 
-	.area-card {
-		background: rgb(var(--card-bg));
-		padding: 1.5rem;
-		border-radius: 0.75rem;
-		text-align: left;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-		border: 1px solid rgba(var(--gray), 0.1);
-		transition: all 0.2s ease;
+	.hero-left h1 {
+		font-size: 3rem;
+		font-weight: 700;
+		margin: 0 0 0.5rem 0;
+		color: white;
+		line-height: 1.1;
 	}
 
-	.area-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-		border-color: rgba(var(--accent), 0.2);
+	.hero-title {
+		font-size: 1.25rem;
+		color: rgb(var(--gray-dark));
+		margin: 0 0 2rem 0;
+		font-weight: 400;
 	}
 
-	.area-header {
+	.social-links {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.social-link {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		margin-bottom: 1rem;
+		color: rgb(var(--gray-dark));
+		text-decoration: none;
+		font-style: italic;
+		transition: color 0.2s ease;
 	}
 
-	.area-icon {
-		width: 40px;
-		height: 40px;
-		background: rgba(var(--accent), 0.1);
-		border-radius: 0.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: var(--accent);
+	.social-link:hover {
+		color: white;
+	}
+
+	.social-link svg {
 		flex-shrink: 0;
 	}
 
-	.area-card h3 {
-		font-size: 1.1rem;
-		margin: 0;
-		color: rgb(var(--black));
-		font-family: var(--font-heading);
-		font-weight: 600;
-	}
-
-	.area-card p {
-		color: rgb(var(--gray));
+	.about-section {
+		font-size: 1rem;
 		line-height: 1.6;
-		margin: 0;
-		font-size: 0.9rem;
+		color: rgb(var(--gray-dark));
 	}
 
-	.latest-posts {
-		padding: 6rem 1rem;
+	.about-section p {
+		margin: 0 0 1.5rem 0;
+	}
+
+	.about-section p:last-child {
+		margin-bottom: 0;
+	}
+
+	.link {
+		color: rgb(var(--gray-dark));
+		text-decoration: underline;
+		transition: color 0.2s ease;
+	}
+
+	.link:hover {
+		color: white;
+	}
+
+	.skills {
+		padding: 4rem 2rem;
 		max-width: 1200px;
 		margin: 0 auto;
+		border-top: 1px solid rgba(var(--gray-dark), 0.2);
 	}
 
-	.posts-content {
-		text-align: center;
-	}
-
-	.posts-description {
-		font-size: 1.125rem;
-		color: rgb(var(--gray));
-		margin-bottom: 2rem;
-		max-width: 600px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-	.post-grid {
+	.skills-content {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2rem;
-		margin-top: 2rem;
+		grid-template-columns: 1fr 1fr;
+		gap: 4rem;
 	}
 
-	.view-all {
-		text-align: center;
-		margin-top: 2rem;
+	.skill-item {
+		margin-bottom: 3rem;
+	}
+
+	.skill-item:last-child {
+		margin-bottom: 0;
+	}
+
+	.skill-item h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0 0 0.75rem 0;
+		color: white;
+	}
+
+	.skill-item p {
+		font-size: 1rem;
+		line-height: 1.6;
+		color: rgb(var(--gray-dark));
+		margin: 0;
+	}
+
+	.spaces {
+		padding: 4rem 2rem;
+		max-width: 1200px;
+		margin: 0 auto;
+		border-top: 1px solid rgba(var(--gray-dark), 0.2);
+	}
+
+	.spaces h2 {
+		font-size: 2rem;
+		font-weight: 600;
+		margin: 0 0 1rem 0;
+		color: white;
+	}
+
+	.spaces-description {
+		font-size: 1rem;
+		line-height: 1.6;
+		color: rgb(var(--gray-dark));
+		margin: 0 0 3rem 0;
+	}
+
+	.spaces-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem;
+	}
+
+	.space-card {
+		background: rgba(var(--gray-dark), 0.1);
+		border: 1px solid rgba(var(--gray-dark), 0.2);
+		padding: 2rem;
+		border-radius: 0.5rem;
+		transition: all 0.2s ease;
+	}
+
+	.space-card:hover {
+		background: rgba(var(--gray-dark), 0.15);
+		border-color: rgba(var(--gray-dark), 0.3);
+	}
+
+	.space-card h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0 0 1rem 0;
+		color: white;
+	}
+
+	.space-card p {
+		font-size: 1rem;
+		line-height: 1.6;
+		color: rgb(var(--gray-dark));
+		margin: 0;
 	}
 
 	@media (max-width: 768px) {
 		.hero {
-			padding: 6rem 1rem;
+			padding: 2rem 1rem;
 		}
 
-		.hero h1 {
+		.hero-content {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+
+		.hero-left h1 {
 			font-size: 2.5rem;
 		}
 
-		.hero-description {
-			font-size: 1.125rem;
-			padding: 0 1rem;
+		.skills {
+			padding: 2rem 1rem;
 		}
 
-		.cta-buttons {
-			flex-direction: column;
-			align-items: stretch;
-			padding: 0 2rem;
-		}
-
-		.primary-button, .secondary-button {
-			justify-content: center;
-		}
-
-		.areas-focus {
-			padding: 4rem 1rem;
-		}
-
-		.areas-focus h2 {
-			font-size: 2rem;
-		}
-
-		.areas-grid {
+		.skills-content {
 			grid-template-columns: 1fr;
-			gap: 1rem;
-			max-width: 100%;
+			gap: 2rem;
 		}
 
-		.area-card {
-			padding: 1.25rem;
+		.skill-item {
+			margin-bottom: 2rem;
 		}
 
-		.latest-posts {
-			padding: 4rem 1rem;
+		.spaces {
+			padding: 2rem 1rem;
 		}
 
-		.post-grid {
+		.spaces-grid {
 			grid-template-columns: 1fr;
 			gap: 1.5rem;
 		}
 
-		.view-all {
-			margin-top: 1.5rem;
+		.space-card {
+			padding: 1.5rem;
 		}
 	}
 </style>
