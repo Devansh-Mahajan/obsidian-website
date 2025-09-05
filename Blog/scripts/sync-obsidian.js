@@ -153,7 +153,7 @@ async function syncObsidianPosts() {
         const VAULT_INCLUDE_PREFIXES = [
             '200', '300', '700', '800', '998'
         ];
-        const EXCLUDE_NAMES = new Set(['Blog', 'node_modules', '.git', '.obsidian']);
+        const EXCLUDE_NAMES = new Set(['Blog', 'node_modules', '.git', '.obsidian', 'Welcome.md']);
 
         async function findVaultMarkdown(dir) {
             const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -173,10 +173,30 @@ async function syncObsidianPosts() {
                     }
                     files = files.concat(await findVaultMarkdown(full));
                 } else if (entry.name.endsWith('.md')) {
-                    files.push(full);
+                    // Only include markdown files that are NOT in the vault root
+                    const isInVaultRoot = path.dirname(relFromVault) === '';
+                    if (!isInVaultRoot) {
+                        files.push(full);
+                    }
                 }
             }
             return files;
+        }
+
+        // Find markdown files only in specified folders
+        async function findVaultMarkdownInSpecifiedFolders() {
+            let allFiles = [];
+            for (const prefix of VAULT_INCLUDE_PREFIXES) {
+                const entries = await fs.readdir(VAULT_ROOT, { withFileTypes: true });
+                for (const entry of entries) {
+                    if (entry.isDirectory() && entry.name.startsWith(prefix) && !EXCLUDE_NAMES.has(entry.name)) {
+                        const folderPath = path.join(VAULT_ROOT, entry.name);
+                        const files = await findVaultMarkdown(folderPath);
+                        allFiles = allFiles.concat(files);
+                    }
+                }
+            }
+            return allFiles;
         }
 
         // Find all attachment files (images, PDFs, etc.) in specified folders only
@@ -208,7 +228,7 @@ async function syncObsidianPosts() {
             return files;
         }
 
-        const vaultMarkdownFiles = await findVaultMarkdown(VAULT_ROOT);
+        const vaultMarkdownFiles = await findVaultMarkdownInSpecifiedFolders();
 
         // Build a lookup for wikilinks: basename -> dest relative path (first unique match wins)
         function computeDestRelative(srcFullPath) {
@@ -264,7 +284,18 @@ async function syncObsidianPosts() {
 
         // First, copy all attachments and build attachment map
         await fs.mkdir(ATTACHMENTS_DIR, { recursive: true });
-        const vaultAttachmentFiles = await findVaultAttachments(VAULT_ROOT);
+        // Find attachments only in specified folders
+        let vaultAttachmentFiles = [];
+        for (const prefix of VAULT_INCLUDE_PREFIXES) {
+            const entries = await fs.readdir(VAULT_ROOT, { withFileTypes: true });
+            for (const entry of entries) {
+                if (entry.isDirectory() && entry.name.startsWith(prefix) && !EXCLUDE_NAMES.has(entry.name)) {
+                    const folderPath = path.join(VAULT_ROOT, entry.name);
+                    const files = await findVaultAttachments(folderPath);
+                    vaultAttachmentFiles = vaultAttachmentFiles.concat(files);
+                }
+            }
+        }
         await Promise.all(
             vaultAttachmentFiles.map(async (srcPath) => {
                 const relFromVault = path.relative(VAULT_ROOT, srcPath);
