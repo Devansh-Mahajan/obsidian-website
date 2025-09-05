@@ -330,6 +330,28 @@ const posts = (await getCollection('blog'))
 		background: rgba(255, 255, 255, 0.95);
 	}
 
+	/* Dark mode styling for areas of focus */
+	[data-theme='dark'] .areas-focus {
+		background: rgba(var(--gray-light), 0.3);
+	}
+
+	[data-theme='dark'] .area-card {
+		background: rgb(var(--card-bg));
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		border: 1px solid rgba(var(--gray), 0.1);
+	}
+
+	[data-theme='dark'] .area-card:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		border-color: rgba(var(--accent), 0.2);
+		background: rgb(var(--card-bg));
+	}
+
+	[data-theme='dark'] .area-icon {
+		background: rgba(var(--accent), 0.1);
+		color: var(--accent);
+	}
+
 	.area-header {
 		display: flex;
 		align-items: center;
