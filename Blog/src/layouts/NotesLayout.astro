@@ -209,6 +209,10 @@ const breadcrumbs = breadcrumbFrom(currentPath);
                 color: var(--obsidian-accent);
             }
             
+            .breadcrumb-part {
+                color: var(--obsidian-text-secondary);
+            }
+            
             .content { 
                 padding: 2rem; 
                 border-radius: 0.75rem; 
@@ -452,9 +456,10 @@ const breadcrumbs = breadcrumbFrom(currentPath);
             <section class="content">
                 {breadcrumbs.length > 0 && (
                     <div class="breadcrumbs">
+                        <a class="link" href={getUrl('/notes')}>Study Notes</a>
                         {breadcrumbs.map((part, i) => (
                             <>
-                                {i > 0 && ' / '}<a class="link" href={getUrl(`/notes/${breadcrumbs.slice(0, i+1).join('/')}`)}>{part}</a>
+                                {' / '}<span class="breadcrumb-part">{part}</span>
                             </>
                         ))}
                     </div>
