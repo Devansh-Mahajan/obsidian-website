@@ -85,11 +85,55 @@ const breadcrumbs = breadcrumbFrom(currentPath);
             <aside class="sidebar">
                 <input class="search" type="search" placeholder="Search notes..." aria-label="Search notes" />
                 <ul class="tree" id="notes-tree">
-                    {sortKeys(root).map((key) => (
-                        <li class="tree-item">
-                            <TreeNodeEl node={root[key]} basePath="" />
-                        </li>
-                    ))}
+                    {sortKeys(root).map((key) => {
+                        const node = root[key];
+                        const hasChildren = !!node.children && Object.keys(node.children).length > 0;
+                        const label = node.name;
+                        const path = node.path ? `/notes/${node.path}` : undefined;
+                        const isActive = path && currentPath && (path === `/notes/${currentPath}`);
+                        return (
+                            <li class="tree-item">
+                                {hasChildren ? (
+                                    <details open>
+                                        <summary class="folder">
+                                            <button class="folder-btn" aria-label="Toggle folder">▸</button>
+                                            {label}
+                                        </summary>
+                                        <ul class="tree">
+                                            {sortKeys(node.children!).map((k) => {
+                                                const childNode = node.children![k];
+                                                const childPath = childNode.path ? `/notes/${childNode.path}` : undefined;
+                                                const childActive = childPath && currentPath && (childPath === `/notes/${currentPath}`);
+                                                return (
+                                                    <li class="tree-item">
+                                                        <div class="note">
+                                                            {childPath ? (
+                                                                <a class={`link ${childActive ? 'active' : ''}`} href={getUrl(childPath)}>
+                                                                    {childNode.name}
+                                                                </a>
+                                                            ) : (
+                                                                <span>{childNode.name}</span>
+                                                            )}
+                                                        </div>
+                                                    </li>
+                                                );
+                                            })}
+                                        </ul>
+                                    </details>
+                                ) : (
+                                    <div class="note">
+                                        {path ? (
+                                            <a class={`link ${isActive ? 'active' : ''}`} href={getUrl(path)}>
+                                                {label}
+                                            </a>
+                                        ) : (
+                                            <span>{label}</span>
+                                        )}
+                                    </div>
+                                )}
+                            </li>
+                        );
+                    })}
                 </ul>
             </aside>
             <section class="content">
@@ -209,41 +253,5 @@ const breadcrumbs = breadcrumbFrom(currentPath);
         </script>
     </body>
 
-    <!-- Tree node component -->
-    <Fragment slot="components">
-        {null}
-    </Fragment>
 </html>
-
-{/** Inline component to render nodes recursively */}
-{(() => {
-    function Node(props: { node: TreeNode; basePath: string }) {
-        const { node, basePath } = props;
-        const hasChildren = !!node.children && Object.keys(node.children).length > 0;
-        const label = node.name;
-        const path = node.path ? `/notes/${node.path}` : undefined;
-        const isActive = path && currentPath && (path === `/notes/${currentPath}`);
-        return (
-            <div>
-                {hasChildren ? (
-                    <details open>
-                        <summary class="folder"><button class="folder-btn" aria-label="Toggle folder">▸</button>{label}</summary>
-                        <ul class="tree">
-                            {sortKeys(node.children!).map((k) => (
-                                <li class="tree-item"><TreeNodeEl node={node.children![k]} basePath={`${basePath}/${label}`} /></li>
-                            ))}
-                        </ul>
-                    </details>
-                ) : (
-                    <div class="note">
-                        {path ? <a class={`link ${isActive ? 'active' : ''}`} href={getUrl(path)}>{label}</a> : <span>{label}</span>}
-                    </div>
-                )}
-            </div>
-        );
-    }
-    // Expose as component
-    // @ts-ignore
-    globalThis.TreeNodeEl = Node;
-})()}
 
