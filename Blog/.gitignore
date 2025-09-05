@@ -51,3 +51,6 @@ chromium/
 *.7z
 *.bak
 *.tmp
+
+# Quartz temporary files
+quartz-temp/
