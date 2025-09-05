@@ -1,0 +1,223 @@
+{
+  "main": {
+    "id": "b4ae388590e00fba",
+    "type": "split",
+    "children": [
+      {
+        "id": "94174ceceee48335",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b0561b86ef4dfc64",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "999 Templates/Class Template.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Class Template"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d5e9f8921163f743",
+    "type": "split",
+    "children": [
+      {
+        "id": "19185f563c84144a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f3d1b0f46aca7cf4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": true
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "5c5fb8f729231498",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "b144a7c07a8e99db",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "44ac1d4342bf6645",
+    "type": "split",
+    "children": [
+      {
+        "id": "860e8fbeacc237e9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a06de71410efdbfe",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "03_ETH/EPROG/EBNF.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for EBNF"
+            }
+          },
+          {
+            "id": "be2ef7f44b70719a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Pasted image 20240825205117.png",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Pasted image 20240825205117"
+            }
+          },
+          {
+            "id": "44e765fe0258bcdb",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "46543bc471d1d696",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Pasted image 20240825205117.png"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Pasted image 20240825205117"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "bases:Create new base": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "audio-recorder:Start/stop recording": false,
+      "templater-obsidian:Templater": false
+    }
+  },
+  "active": "f3d1b0f46aca7cf4",
+  "lastOpenFiles": [
+    "nigga.md",
+    "999 Templates/Class Template.md",
+    "Welcome.md",
+    "700 Quant",
+    "300 IMO + Putnam",
+    "999 Templates",
+    "998 Images",
+    "900 Todo",
+    "800 Projects",
+    "600 Links",
+    "500 Book",
+    "400 Day Notes",
+    "200 ETH Zurich",
+    "06_Templates/PEOPLE ROLODEX TEMPLATE.md",
+    "06_Templates/KNOWLEDGE DATABASE TEMPLATE.md",
+    "06_Templates/STEM Concept Notes.md",
+    "06_Templates/Concept.md",
+    "06_Templates/Udemy Course Notes.md",
+    "01_Daily Notes/2025-05-17.md",
+    "01_Daily Notes/2025-03-09.md",
+    "01_Daily Notes/2025-05-08.md",
+    "01_Daily Notes/2025-03-08.md",
+    "01_Daily Notes/2025-03-06.md",
+    "06_Templates/Daily Note.md",
+    "06_Templates/Meeting Log.md",
+    "06_Templates/Name.md",
+    "03_ETH/EPROG/EBNF.md",
+    "06_Templates/Research & Book Notes.md",
+    "06_Templates/Non-STEM Concept Notes (Analytical & Argumentative Thinking).md",
+    "01_Daily Notes/2025-02-27.md",
+    "01_Daily Notes/2025-03-01.md",
+    "05_TAGS/Programming.md",
+    "01_Daily Notes/2025-02-28.md",
+    "WIP.md",
+    "YYYY-MM-DD Meeting with Person’s Name.md",
+    "To Do.md",
+    "Pasted image 20240825205117.png",
+    "Pasted image 20240825205628.png",
+    "Pasted image 20240825222513.png",
+    "Untitled.canvas"
+  ]
+}
