@@ -12,15 +12,38 @@ const notes = (await getCollection('notes'))
 ---
 
 <NotesLayout title="Study Notes" description="Published study notes from my Obsidian vault.">
-    <h1>Study Notes</h1>
-    <ul>
+    <div style="margin-bottom: 2rem;">
+        <h1 style="margin-bottom: 0.5rem; color: var(--obsidian-text);">Study Notes</h1>
+        <p style="color: var(--obsidian-text-secondary); margin: 0;">Curated notes from my Obsidian vault</p>
+    </div>
+    
+    <div style="display: grid; gap: 1rem;">
         {notes.map((note) => (
-            <li>
-                <a href={("/notes/" + (note.data.slug || note.id.replace(/\.[^/.]+$/, '')))}>
+            <a 
+                href={("/notes/" + (note.data.slug || note.id.replace(/\.[^/.]+$/, '')))}
+                style="
+                    display: block;
+                    padding: 1rem;
+                    background: var(--obsidian-bg-tertiary);
+                    border: 1px solid var(--obsidian-border);
+                    border-radius: 0.5rem;
+                    text-decoration: none;
+                    color: var(--obsidian-text);
+                    transition: all 0.2s ease;
+                "
+                onmouseover="this.style.background='var(--obsidian-hover)'; this.style.borderColor='var(--obsidian-accent)'"
+                onmouseout="this.style.background='var(--obsidian-bg-tertiary)'; this.style.borderColor='var(--obsidian-border)'"
+            >
+                <h3 style="margin: 0 0 0.5rem 0; color: var(--obsidian-text); font-size: 1.1rem;">
                     {note.data.title || note.id.split('/').pop()?.replace(/-/g, ' ').replace(/_/g, ' ')}
-                </a>
-            </li>
+                </h3>
+                {note.data.description && (
+                    <p style="margin: 0; color: var(--obsidian-text-secondary); font-size: 0.9rem;">
+                        {note.data.description}
+                    </p>
+                )}
+            </a>
         ))}
-    </ul>
+    </div>
 </NotesLayout>
 

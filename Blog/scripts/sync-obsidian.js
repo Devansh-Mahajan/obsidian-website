@@ -47,9 +47,15 @@ async function cleanNotesDirectory() {
     try {
         const files = await fs.readdir(ASTRO_NOTES_PATH);
         await Promise.all(
-            files.map(file => 
-                fs.unlink(path.join(ASTRO_NOTES_PATH, file))
-            )
+            files.map(async (file) => {
+                const filePath = path.join(ASTRO_NOTES_PATH, file);
+                const stat = await fs.stat(filePath);
+                if (stat.isDirectory()) {
+                    await fs.rm(filePath, { recursive: true, force: true });
+                } else {
+                    await fs.unlink(filePath);
+                }
+            })
         );
         console.log('🧹 Cleaned notes directory');
     } catch (error) {

@@ -56,27 +56,317 @@ const breadcrumbs = breadcrumbFrom(currentPath);
     <head>
         <BaseHead title={title} description={description} />
         <style>
-            body { min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
-            main { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 1.5rem; display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
-            .sidebar { position: sticky; top: 4.5rem; height: calc(100vh - 5rem); overflow: auto; padding: 1rem; border-radius: 0.75rem; background: rgba(var(--gray-light), 0.4); }
-            .search { width: 100%; padding: 0.6rem 0.8rem; border-radius: 0.5rem; border: 1px solid rgba(var(--gray),0.2); background: white; margin-bottom: 0.75rem; }
-            .tree { list-style: none; margin: 0; padding: 0; }
-            .tree-item { margin: 0.15rem 0; }
-            .folder, .note { display: flex; align-items: center; gap: 0.4rem; }
-            .folder-btn { background: transparent; border: none; cursor: pointer; padding: 0.25rem; border-radius: 0.4rem; }
-            .link { text-decoration: none; color: rgb(var(--gray-dark)); padding: 0.25rem 0.35rem; border-radius: 0.4rem; display: inline-block; }
-            .link:hover { background: rgba(var(--gray), 0.1); color: rgb(var(--black)); }
-            .active { color: var(--accent); font-weight: 600; }
-            .breadcrumbs { font-size: 0.9rem; color: rgb(var(--gray)); margin-bottom: 0.5rem; }
-            .content { padding: 1rem; border-radius: 0.75rem; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-            .attachments { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(var(--gray), 0.1); }
-            .attachments h3 { margin-bottom: 1rem; color: rgb(var(--gray-dark)); font-size: 1.1rem; }
-            .attachment-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
-            .attachment-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border-radius: 0.5rem; background: rgba(var(--gray-light), 0.3); text-decoration: none; color: inherit; transition: all 0.2s ease; }
-            .attachment-item:hover { background: rgba(var(--accent), 0.08); transform: translateY(-1px); }
-            .attachment-icon { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
-            .attachment-name { font-size: 0.9rem; font-weight: 500; }
-            @media (max-width: 980px) { main { grid-template-columns: 1fr; } .sidebar { position: static; height: auto; } }
+            /* Dark theme for Study Notes - Obsidian Publish style */
+            :root {
+                --obsidian-bg: #1e1e1e;
+                --obsidian-bg-secondary: #2d2d2d;
+                --obsidian-bg-tertiary: #3a3a3a;
+                --obsidian-text: #dcddde;
+                --obsidian-text-secondary: #a0a0a0;
+                --obsidian-text-muted: #7a7a7a;
+                --obsidian-accent: #7c3aed;
+                --obsidian-accent-hover: #8b5cf6;
+                --obsidian-border: #404040;
+                --obsidian-border-light: #2a2a2a;
+                --obsidian-hover: #3a3a3a;
+                --obsidian-active: #4a4a4a;
+            }
+
+            body { 
+                min-height: 100vh; 
+                display: flex; 
+                flex-direction: column; 
+                margin: 0; 
+                background: var(--obsidian-bg);
+                color: var(--obsidian-text);
+            }
+            
+            main { 
+                flex: 1; 
+                width: 100%; 
+                max-width: 1400px; 
+                margin: 0 auto; 
+                padding: 1.5rem; 
+                display: grid; 
+                grid-template-columns: 320px 1fr; 
+                gap: 1.5rem; 
+            }
+            
+            .sidebar { 
+                position: sticky; 
+                top: 4.5rem; 
+                height: calc(100vh - 5rem); 
+                overflow: auto; 
+                padding: 1rem; 
+                border-radius: 0.75rem; 
+                background: var(--obsidian-bg-secondary);
+                border: 1px solid var(--obsidian-border);
+            }
+            
+            .search { 
+                width: 100%; 
+                padding: 0.6rem 0.8rem; 
+                border-radius: 0.5rem; 
+                border: 1px solid var(--obsidian-border); 
+                background: var(--obsidian-bg-tertiary); 
+                color: var(--obsidian-text);
+                margin-bottom: 0.75rem; 
+            }
+            
+            .search::placeholder {
+                color: var(--obsidian-text-muted);
+            }
+            
+            .search:focus {
+                outline: none;
+                border-color: var(--obsidian-accent);
+                box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+            }
+            
+            .tree { 
+                list-style: none; 
+                margin: 0; 
+                padding: 0; 
+            }
+            
+            .tree-item { 
+                margin: 0.15rem 0; 
+            }
+            
+            .folder, .note { 
+                display: flex; 
+                align-items: center; 
+                gap: 0.4rem; 
+            }
+            
+            .folder-btn { 
+                background: transparent; 
+                border: none; 
+                cursor: pointer; 
+                padding: 0.25rem; 
+                border-radius: 0.4rem; 
+                color: var(--obsidian-text-secondary);
+            }
+            
+            .folder-btn:hover {
+                background: var(--obsidian-hover);
+            }
+            
+            .link { 
+                text-decoration: none; 
+                color: var(--obsidian-text-secondary); 
+                padding: 0.25rem 0.35rem; 
+                border-radius: 0.4rem; 
+                display: inline-block; 
+                transition: all 0.2s ease;
+            }
+            
+            .link:hover { 
+                background: var(--obsidian-hover); 
+                color: var(--obsidian-text); 
+            }
+            
+            .active { 
+                color: var(--obsidian-accent); 
+                font-weight: 600; 
+                background: var(--obsidian-active);
+            }
+            
+            .breadcrumbs { 
+                font-size: 0.9rem; 
+                color: var(--obsidian-text-muted); 
+                margin-bottom: 0.5rem; 
+            }
+            
+            .breadcrumbs .link {
+                color: var(--obsidian-text-secondary);
+            }
+            
+            .breadcrumbs .link:hover {
+                color: var(--obsidian-accent);
+            }
+            
+            .content { 
+                padding: 2rem; 
+                border-radius: 0.75rem; 
+                background: var(--obsidian-bg-secondary); 
+                border: 1px solid var(--obsidian-border);
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            
+            .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+                color: var(--obsidian-text);
+                margin-top: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .content h1 {
+                font-size: 2rem;
+                border-bottom: 2px solid var(--obsidian-border);
+                padding-bottom: 0.5rem;
+            }
+            
+            .content p {
+                line-height: 1.6;
+                margin-bottom: 1rem;
+                color: var(--obsidian-text);
+            }
+            
+            .content a {
+                color: var(--obsidian-accent);
+                text-decoration: none;
+            }
+            
+            .content a:hover {
+                color: var(--obsidian-accent-hover);
+                text-decoration: underline;
+            }
+            
+            .content code {
+                background: var(--obsidian-bg-tertiary);
+                color: var(--obsidian-accent);
+                padding: 0.2rem 0.4rem;
+                border-radius: 0.3rem;
+                font-size: 0.9em;
+            }
+            
+            .content pre {
+                background: var(--obsidian-bg-tertiary);
+                border: 1px solid var(--obsidian-border);
+                border-radius: 0.5rem;
+                padding: 1rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+            }
+            
+            .content pre code {
+                background: none;
+                padding: 0;
+                color: var(--obsidian-text);
+            }
+            
+            .content blockquote {
+                border-left: 4px solid var(--obsidian-accent);
+                background: var(--obsidian-bg-tertiary);
+                margin: 1rem 0;
+                padding: 1rem;
+                border-radius: 0 0.5rem 0.5rem 0;
+            }
+            
+            .content ul, .content ol {
+                margin: 1rem 0;
+                padding-left: 1.5rem;
+            }
+            
+            .content li {
+                margin: 0.25rem 0;
+                color: var(--obsidian-text);
+            }
+            
+            .content table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 1rem 0;
+                background: var(--obsidian-bg-tertiary);
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+            
+            .content th, .content td {
+                padding: 0.75rem;
+                text-align: left;
+                border-bottom: 1px solid var(--obsidian-border);
+            }
+            
+            .content th {
+                background: var(--obsidian-bg);
+                color: var(--obsidian-text);
+                font-weight: 600;
+            }
+            
+            .attachments { 
+                margin-top: 2rem; 
+                padding-top: 1.5rem; 
+                border-top: 1px solid var(--obsidian-border); 
+            }
+            
+            .attachments h3 { 
+                margin-bottom: 1rem; 
+                color: var(--obsidian-text); 
+                font-size: 1.1rem; 
+            }
+            
+            .attachment-list { 
+                display: grid; 
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+                gap: 0.75rem; 
+            }
+            
+            .attachment-item { 
+                display: flex; 
+                align-items: center; 
+                gap: 0.5rem; 
+                padding: 0.75rem; 
+                border-radius: 0.5rem; 
+                background: var(--obsidian-bg-tertiary); 
+                border: 1px solid var(--obsidian-border);
+                text-decoration: none; 
+                color: var(--obsidian-text); 
+                transition: all 0.2s ease; 
+            }
+            
+            .attachment-item:hover { 
+                background: var(--obsidian-hover); 
+                border-color: var(--obsidian-accent);
+                transform: translateY(-1px); 
+            }
+            
+            .attachment-icon { 
+                width: 1.25rem; 
+                height: 1.25rem; 
+                flex-shrink: 0; 
+            }
+            
+            .attachment-name { 
+                font-size: 0.9rem; 
+                font-weight: 500; 
+            }
+            
+            /* Mermaid diagrams dark theme */
+            .content :global(.mermaid) {
+                background: var(--obsidian-bg-tertiary) !important;
+                border: 1px solid var(--obsidian-border);
+                border-radius: 0.5rem;
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+            
+            .content :global(.mermaid svg) {
+                background: transparent !important;
+            }
+            
+            /* Math equations */
+            .content :global(.katex) {
+                color: var(--obsidian-text);
+            }
+            
+            /* Image styling */
+            .content img {
+                border-radius: 0.5rem;
+                border: 1px solid var(--obsidian-border);
+                max-width: 100%;
+                height: auto;
+            }
+            
+            @media (max-width: 980px) { 
+                main { 
+                    grid-template-columns: 1fr; 
+                } 
+                .sidebar { 
+                    position: static; 
+                    height: auto; 
+                } 
+            }
         </style>
     </head>
     <body>
