@@ -30,8 +30,33 @@
               "icon": "lucide-file",
               "title": "Class Template"
             }
+          },
+          {
+            "id": "50f5f380bc4ab82e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "300 IMO + Putnam/Tao Book.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Tao Book"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -63,7 +88,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "nigga",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -84,7 +109,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -177,10 +203,11 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "f3d1b0f46aca7cf4",
+  "active": "5c5fb8f729231498",
   "lastOpenFiles": [
-    "nigga.md",
     "999 Templates/Class Template.md",
+    "300 IMO + Putnam/Tao Book.md",
+    "nigga.md",
     "Welcome.md",
     "700 Quant",
     "300 IMO + Putnam",
@@ -214,7 +241,6 @@
     "01_Daily Notes/2025-02-28.md",
     "WIP.md",
     "YYYY-MM-DD Meeting with Person’s Name.md",
-    "To Do.md",
     "Pasted image 20240825205117.png",
     "Pasted image 20240825205628.png",
     "Pasted image 20240825222513.png",
