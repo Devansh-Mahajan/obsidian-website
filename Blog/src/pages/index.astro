@@ -34,7 +34,7 @@ const posts = (await getCollection('blog'))
 						</svg>
 						Computer Science Student
 					</div>
-					<h1>Devansh Mahajan</h1>
+					<h1><span class="name-blue">Devansh</span> Mahajan</h1>
 					<p class="hero-description">
 						Passionate about algorithms, mathematics, and technology. Currently pursuing Computer Science at ETH Zürich, 
 						where I explore the intersection of theory and practice through rigorous study and hands-on projects.
@@ -209,6 +209,13 @@ const posts = (await getCollection('blog'))
 		letter-spacing: -0.02em;
 	}
 
+	.name-blue {
+		background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
 	.hero-description {
 		font-size: 1.25rem;
 		color: rgb(var(--gray));
@@ -238,14 +245,14 @@ const posts = (await getCollection('blog'))
 	}
 
 	.primary-button {
-		background: var(--accent);
+		background: linear-gradient(135deg, #3b82f6, #1d4ed8);
 		color: white;
-		box-shadow: 0 4px 14px rgba(var(--accent), 0.3);
+		box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
 	}
 
 	.primary-button:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 8px 25px rgba(var(--accent), 0.4);
+		box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
 	}
 
 	.secondary-button {
