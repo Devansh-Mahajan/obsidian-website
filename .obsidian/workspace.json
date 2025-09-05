@@ -54,9 +54,33 @@
               "icon": "lucide-file",
               "title": "Tao Book"
             }
+          },
+          {
+            "id": "e1b0718d948f9d1a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "200 ETH Zurich/Untitled.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
+              "icon": "lucide-file",
+              "title": "Untitled"
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -88,7 +112,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "nigga",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -109,8 +133,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -203,8 +226,10 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "5c5fb8f729231498",
+  "active": "f3d1b0f46aca7cf4",
   "lastOpenFiles": [
+    "300 IMO + Putnam/Tao Book.md",
+    "200 ETH Zurich/Untitled.md",
     "Blog/dist/sitemap-index.xml",
     "Blog/dist/sitemap-0.xml",
     "Blog/dist/seo-implementation-guide/index.html",
@@ -215,12 +240,10 @@
     "Blog/dist/git-setup-for-obsidian",
     "Blog/dist/obsidian-publishing-guide/index.html",
     "Blog/dist/obsidian-publishing-guide",
-    "Blog/dist/obsidian-blogger-template/index.html",
     "Blog/dist/icon.png",
     "Blog/dist/favicon.svg",
     "Blog/src/content/notes/300 IMO + Putnam/Tao Book.md",
     "999 Templates/Class Template.md",
-    "300 IMO + Putnam/Tao Book.md",
     "nigga.md",
     "Welcome.md",
     "06_Templates/PEOPLE ROLODEX TEMPLATE.md",
