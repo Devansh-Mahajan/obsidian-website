@@ -11,6 +11,10 @@ const ASTRO_BLOG_PATH = path.join(PROJECT_ROOT, 'src/content/blog');
 const ASTRO_NOTES_PATH = path.join(PROJECT_ROOT, 'src/content/notes');
 // Assuming project is at .../Obsidian/Personal/Blog → vault root is parent directory
 const VAULT_ROOT = path.resolve(PROJECT_ROOT, '..');
+const PUBLIC_DIR = path.join(PROJECT_ROOT, 'public');
+const SEARCH_INDEX_PATH = path.join(PUBLIC_DIR, 'notes-index.json');
+const BACKLINKS_PATH = path.join(PUBLIC_DIR, 'notes-backlinks.json');
+const ATTACHMENTS_DIR = path.join(PUBLIC_DIR, 'attachments');
 
 // Directories to exclude from scanning
 const EXCLUDED_DIRS = [
@@ -169,16 +173,169 @@ async function syncObsidianPosts() {
             return files;
         }
 
+        // Find all attachment files (images, PDFs, etc.)
+        async function findVaultAttachments(dir) {
+            const entries = await fs.readdir(dir, { withFileTypes: true });
+            let files = [];
+            for (const entry of entries) {
+                const full = path.join(dir, entry.name);
+                const relFromVault = path.relative(VAULT_ROOT, full);
+                if (entry.isDirectory()) {
+                    const isRootLevel = path.dirname(relFromVault) === '';
+                    if (isRootLevel) {
+                        const allowed = VAULT_INCLUDE_PREFIXES.some(prefix => entry.name.startsWith(prefix));
+                        if (!allowed || EXCLUDE_NAMES.has(entry.name) || entry.name.startsWith('.')) continue;
+                    } else {
+                        if (entry.name.startsWith('.') || EXCLUDE_NAMES.has(entry.name)) continue;
+                    }
+                    files = files.concat(await findVaultAttachments(full));
+                } else {
+                    // Include common attachment types
+                    const ext = path.extname(entry.name).toLowerCase();
+                    const attachmentExts = ['.pdf', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.mp4', '.webm', '.mp3', '.wav', '.zip', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'];
+                    if (attachmentExts.includes(ext)) {
+                        files.push(full);
+                    }
+                }
+            }
+            return files;
+        }
+
         const vaultMarkdownFiles = await findVaultMarkdown(VAULT_ROOT);
+
+        // Build a lookup for wikilinks: basename -> dest relative path (first unique match wins)
+        function stripNumericPrefix(name) {
+            return name.replace(/^\d+\s*/u, '').trim();
+        }
+
+        function computeDestRelative(srcFullPath) {
+            const relFromVault = path.relative(VAULT_ROOT, srcFullPath);
+            const parts = relFromVault.split(path.sep);
+            if (parts.length > 1) {
+                parts[0] = stripNumericPrefix(parts[0]);
+            }
+            return parts.join('/');
+        }
+
+        const basenameToRel = new Map();
+        for (const src of vaultMarkdownFiles) {
+            const rel = computeDestRelative(src);
+            const base = path.basename(src, '.md');
+            if (!basenameToRel.has(base)) {
+                basenameToRel.set(base, rel.replace(/\\/g, '/').replace(/\.md$/i, ''));
+            }
+        }
+
+        function convertWikiLinks(markdown, outgoingCollector) {
+            // Handle [[Page]], [[Page|Alias]], [[Page#Heading]], [[Page#Heading|Alias]]
+            return markdown.replace(/\[\[([^\]|#]+)(?:#([^\]|]+))?(?:\|([^\]]+))?\]\]/g, (m, page, heading, alias) => {
+                const target = String(page).trim();
+                const destRel = basenameToRel.get(target);
+                if (!destRel) return m; // leave unchanged if not found
+                const url = `/notes/${destRel}${heading ? `#${heading.trim().toLowerCase().replace(/\s+/g, '-')}` : ''}`;
+                const text = (alias || target).trim();
+                if (outgoingCollector && typeof outgoingCollector.push === 'function') {
+                    outgoingCollector.push(destRel);
+                }
+                return `[${text}](${url})`;
+            });
+        }
+
+        function convertAttachmentLinks(markdown, attachmentMap) {
+            // Convert ![[attachment.pdf]] and [[attachment.pdf]] to proper links
+            return markdown.replace(/!?\[\[([^\]|#]+)(?:\|([^\]]+))?\]\]/g, (m, file, alias) => {
+                const fileName = String(file).trim();
+                const attachmentPath = attachmentMap.get(fileName);
+                if (!attachmentPath) return m; // leave unchanged if not found
+                const url = `/attachments/${attachmentPath}`;
+                const text = (alias || fileName).trim();
+                const isImage = /\.(png|jpg|jpeg|gif|svg|webp)$/i.test(fileName);
+                if (isImage) {
+                    return `![${text}](${url})`;
+                } else {
+                    return `[${text}](${url})`;
+                }
+            });
+        }
+
+        const searchIndex = [];
+        const outgoingMap = new Map(); // rel -> Set of outgoing rels
+        const attachmentMap = new Map(); // filename -> public path
+
+        // First, copy all attachments and build attachment map
+        await fs.mkdir(ATTACHMENTS_DIR, { recursive: true });
+        const vaultAttachmentFiles = await findVaultAttachments(VAULT_ROOT);
+        await Promise.all(
+            vaultAttachmentFiles.map(async (srcPath) => {
+                const relFromVault = path.relative(VAULT_ROOT, srcPath);
+                const parts = relFromVault.split(path.sep);
+                if (parts.length > 1) {
+                    parts[0] = stripNumericPrefix(parts[0]);
+                }
+                const destRel = parts.join('/');
+                const destPath = path.join(ATTACHMENTS_DIR, destRel);
+                await fs.mkdir(path.dirname(destPath), { recursive: true });
+                await fs.copyFile(srcPath, destPath);
+                const fileName = path.basename(srcPath);
+                attachmentMap.set(fileName, destRel.replace(/\\/g, '/'));
+                console.log(`📎 Copied attachment ${path.relative(VAULT_ROOT, srcPath)} → attachments/${destRel}`);
+            })
+        );
+
+        // Then process markdown files
         await Promise.all(
             vaultMarkdownFiles.map(async (srcPath) => {
-                const fileName = path.basename(srcPath);
-                const destPath = path.join(ASTRO_NOTES_PATH, fileName);
-                await fs.copyFile(srcPath, destPath);
-                console.log(`🗒️  Copied note ${path.relative(VAULT_ROOT, srcPath)} → notes`);
+                const destRel = computeDestRelative(srcPath);
+                const destPath = path.join(ASTRO_NOTES_PATH, destRel);
+                await fs.mkdir(path.dirname(destPath), { recursive: true });
+                // Read, parse frontmatter, convert wikilinks, and write
+                const raw = await fs.readFile(srcPath, 'utf8');
+                let fm = {};
+                let body = raw;
+                try {
+                    const parsed = grayMatter(raw);
+                    fm = parsed.data || {};
+                    body = parsed.content || '';
+                } catch {}
+                const outgoing = [];
+                const transformedBody = convertWikiLinks(convertAttachmentLinks(body, attachmentMap), outgoing);
+                const transformed = grayMatter.stringify(transformedBody, fm);
+                await fs.writeFile(destPath, transformed, 'utf8');
+                console.log(`🗒️  Copied note ${path.relative(VAULT_ROOT, srcPath)} → notes/${destRel}`);
+
+                // Build search index record
+                const title = (fm.title && String(fm.title)) || path.basename(destRel).replace(/-/g, ' ').replace(/_/g, ' ');
+                const plain = transformedBody
+                    .replace(/```[\s\S]*?```/g, ' ') // strip code blocks
+                    .replace(/`[^`]*`/g, ' ') // strip inline code
+                    .replace(/\!\[[^\]]*\]\([^\)]*\)/g, ' ') // strip images
+                    .replace(/\[[^\]]*\]\([^\)]*\)/g, (m) => m.replace(/\[[^\]]*\]\(/, '').replace(/\)$/, ' ')) // strip link text keep target text minimal
+                    .replace(/[#>*_\-]+/g, ' ') // markdown punctuation
+                    .replace(/\s+/g, ' ') // collapse whitespace
+                    .trim();
+                searchIndex.push({ path: destRel.replace(/\\/g, '/').replace(/\.md$/i, ''), title, content: plain });
+
+                // Record outgoing links
+                outgoingMap.set(destRel.replace(/\\/g, '/').replace(/\.md$/i, ''), new Set(outgoing.map(r => r.replace(/\\/g, '/').replace(/\.md$/i, ''))));
             })
         );
         
+        // Build backlinks map
+        const backlinks = {};
+        for (const [from, outs] of outgoingMap.entries()) {
+            for (const to of outs) {
+                backlinks[to] = backlinks[to] || [];
+                const item = searchIndex.find(x => x.path === from);
+                backlinks[to].push({ path: from, title: item ? item.title : from.split('/').pop() });
+            }
+        }
+
+        // Write index files
+        await fs.mkdir(PUBLIC_DIR, { recursive: true });
+        await fs.writeFile(SEARCH_INDEX_PATH, JSON.stringify(searchIndex, null, 2), 'utf8');
+        await fs.writeFile(BACKLINKS_PATH, JSON.stringify(backlinks, null, 2), 'utf8');
+        console.log(`🔎 Wrote search index (${searchIndex.length} notes) and backlinks map`);
+
         console.log('🎉 Sync completed successfully!');
     } catch (error) {
         console.error('Sync failed:', error);

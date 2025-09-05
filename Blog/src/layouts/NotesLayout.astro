@@ -1,0 +1,249 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { getUrl } from '../utils/url';
+
+interface Props {
+    title?: string;
+    description?: string;
+    currentPath?: string; // notes relative path without extension
+}
+
+const { title = 'Study Notes', description = 'Notes from my Obsidian vault.', currentPath } = Astro.props as Props;
+
+const notes = await getCollection('notes');
+
+function toPathWithoutExt(id: string) {
+    return id.replace(/\.[^/.]+$/, '');
+}
+
+// Build a tree from note ids
+type TreeNode = { name: string; path?: string; children?: Record<string, TreeNode> };
+const root: Record<string, TreeNode> = {};
+for (const note of notes) {
+    const rel = toPathWithoutExt(note.id);
+    const parts = rel.split('/');
+    let cursor = root;
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        cursor[part] = cursor[part] || { name: part };
+        if (i === parts.length - 1) {
+            cursor[part].path = rel;
+        } else {
+            cursor[part].children = cursor[part].children || {};
+            cursor = cursor[part].children!;
+        }
+    }
+}
+
+function sortKeys(obj: Record<string, TreeNode>) {
+    return Object.keys(obj).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+}
+
+function breadcrumbFrom(path?: string) {
+    if (!path) return [] as string[];
+    return path.split('/');
+}
+
+const breadcrumbs = breadcrumbFrom(currentPath);
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead title={title} description={description} />
+        <style>
+            body { min-height: 100vh; display: flex; flex-direction: column; margin: 0; }
+            main { flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; padding: 1.5rem; display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem; }
+            .sidebar { position: sticky; top: 4.5rem; height: calc(100vh - 5rem); overflow: auto; padding: 1rem; border-radius: 0.75rem; background: rgba(var(--gray-light), 0.4); }
+            .search { width: 100%; padding: 0.6rem 0.8rem; border-radius: 0.5rem; border: 1px solid rgba(var(--gray),0.2); background: white; margin-bottom: 0.75rem; }
+            .tree { list-style: none; margin: 0; padding: 0; }
+            .tree-item { margin: 0.15rem 0; }
+            .folder, .note { display: flex; align-items: center; gap: 0.4rem; }
+            .folder-btn { background: transparent; border: none; cursor: pointer; padding: 0.25rem; border-radius: 0.4rem; }
+            .link { text-decoration: none; color: rgb(var(--gray-dark)); padding: 0.25rem 0.35rem; border-radius: 0.4rem; display: inline-block; }
+            .link:hover { background: rgba(var(--gray), 0.1); color: rgb(var(--black)); }
+            .active { color: var(--accent); font-weight: 600; }
+            .breadcrumbs { font-size: 0.9rem; color: rgb(var(--gray)); margin-bottom: 0.5rem; }
+            .content { padding: 1rem; border-radius: 0.75rem; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+            .attachments { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(var(--gray), 0.1); }
+            .attachments h3 { margin-bottom: 1rem; color: rgb(var(--gray-dark)); font-size: 1.1rem; }
+            .attachment-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+            .attachment-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border-radius: 0.5rem; background: rgba(var(--gray-light), 0.3); text-decoration: none; color: inherit; transition: all 0.2s ease; }
+            .attachment-item:hover { background: rgba(var(--accent), 0.08); transform: translateY(-1px); }
+            .attachment-icon { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+            .attachment-name { font-size: 0.9rem; font-weight: 500; }
+            @media (max-width: 980px) { main { grid-template-columns: 1fr; } .sidebar { position: static; height: auto; } }
+        </style>
+    </head>
+    <body>
+        <Header />
+        <main>
+            <aside class="sidebar">
+                <input class="search" type="search" placeholder="Search notes..." aria-label="Search notes" />
+                <ul class="tree" id="notes-tree">
+                    {sortKeys(root).map((key) => (
+                        <li class="tree-item">
+                            <TreeNodeEl node={root[key]} basePath="" />
+                        </li>
+                    ))}
+                </ul>
+            </aside>
+            <section class="content">
+                {breadcrumbs.length > 0 && (
+                    <div class="breadcrumbs">
+                        {breadcrumbs.map((part, i) => (
+                            <>
+                                {i > 0 && ' / '}<a class="link" href={getUrl(`/notes/${breadcrumbs.slice(0, i+1).join('/')}`)}>{part}</a>
+                            </>
+                        ))}
+                    </div>
+                )}
+                <slot />
+                <div class="attachments" id="attachments-section" style="display: none;">
+                    <h3>Attachments</h3>
+                    <div class="attachment-list" id="attachment-list"></div>
+                </div>
+            </section>
+        </main>
+        <Footer />
+        <script>
+            const search = document.querySelector('.search');
+            const tree = document.getElementById('notes-tree');
+            const results = document.createElement('div');
+            results.style.marginTop = '0.5rem';
+            tree.parentElement.insertBefore(results, tree.nextSibling);
+            let index = [];
+            fetch('/notes-index.json').then(r => r.ok ? r.json() : []).then(data => { index = data || []; }).catch(() => {});
+            function matches(text, q){ return text.toLowerCase().includes(q.toLowerCase()); }
+            function renderResults(q){
+                if (!q) { results.innerHTML = ''; return; }
+                const qs = q.trim().toLowerCase();
+                const items = index
+                  .map(r => {
+                    const ti = r.title.toLowerCase().indexOf(qs);
+                    const ci = r.content.toLowerCase().indexOf(qs);
+                    let score = 0;
+                    if (ti >= 0) score += 5;
+                    if (ci >= 0) score += 1;
+                    return { r, score, ti, ci };
+                  })
+                  .filter(x => x.score > 0)
+                  .sort((a,b) => b.score - a.score)
+                  .slice(0, 20);
+                results.innerHTML = items.map(({r, ti, ci}) => {
+                    const url = `/notes/${r.path}`;
+                    return `<div style="padding: .35rem 0"><a class="link" href="${url}">${r.title}</a></div>`;
+                }).join('');
+            }
+            search?.addEventListener('input', () => {
+                const q = search.value.trim();
+                if (!q) {
+                    Array.from(tree.querySelectorAll('li')).forEach(li => li.style.display = '');
+                    results.innerHTML = '';
+                    return;
+                }
+                Array.from(tree.querySelectorAll('li')).forEach(li => {
+                    const txt = li.textContent || '';
+                    li.style.display = matches(txt, q) ? '' : 'none';
+                });
+                renderResults(q);
+            });
+
+            // Load and display attachments for current note
+            const attachmentsSection = document.getElementById('attachments-section');
+            const attachmentList = document.getElementById('attachment-list');
+            
+            function getFileIcon(filename) {
+                const ext = filename.split('.').pop()?.toLowerCase();
+                const icons = {
+                    pdf: '📄', doc: '📝', docx: '📝', xls: '📊', xlsx: '📊', ppt: '📽️', pptx: '📽️',
+                    png: '🖼️', jpg: '🖼️', jpeg: '🖼️', gif: '🖼️', svg: '🖼️', webp: '🖼️',
+                    mp4: '🎥', webm: '🎥', mp3: '🎵', wav: '🎵', zip: '📦'
+                };
+                return icons[ext] || '📎';
+            }
+
+            function loadAttachments() {
+                const currentPath = window.location.pathname.replace('/notes/', '').replace(/\/$/, '');
+                if (!currentPath) return;
+                
+                // Find attachments in the same folder as the current note
+                fetch('/notes-index.json')
+                    .then(r => r.ok ? r.json() : [])
+                    .then(index => {
+                        const note = index.find(n => n.path === currentPath);
+                        if (!note) return;
+                        
+                        // Extract attachment references from note content
+                        const attachmentRefs = new Set();
+                        const content = note.content || '';
+                        const matches = content.match(/\/attachments\/[^\s\)]+/g) || [];
+                        matches.forEach(match => {
+                            const filename = match.split('/').pop();
+                            if (filename) attachmentRefs.add(filename);
+                        });
+                        
+                        if (attachmentRefs.size > 0) {
+                            attachmentList.innerHTML = Array.from(attachmentRefs).map(filename => {
+                                const icon = getFileIcon(filename);
+                                const url = `/attachments/${currentPath.split('/').slice(0, -1).join('/')}/${filename}`;
+                                return `
+                                    <a href="${url}" class="attachment-item" target="_blank">
+                                        <span class="attachment-icon">${icon}</span>
+                                        <span class="attachment-name">${filename}</span>
+                                    </a>
+                                `;
+                            }).join('');
+                            attachmentsSection.style.display = 'block';
+                        }
+                    })
+                    .catch(() => {});
+            }
+
+            // Load attachments when page loads
+            loadAttachments();
+        </script>
+    </body>
+
+    <!-- Tree node component -->
+    <Fragment slot="components">
+        {null}
+    </Fragment>
+</html>
+
+{/** Inline component to render nodes recursively */}
+{(() => {
+    function Node(props: { node: TreeNode; basePath: string }) {
+        const { node, basePath } = props;
+        const hasChildren = !!node.children && Object.keys(node.children).length > 0;
+        const label = node.name;
+        const path = node.path ? `/notes/${node.path}` : undefined;
+        const isActive = path && currentPath && (path === `/notes/${currentPath}`);
+        return (
+            <div>
+                {hasChildren ? (
+                    <details open>
+                        <summary class="folder"><button class="folder-btn" aria-label="Toggle folder">▸</button>{label}</summary>
+                        <ul class="tree">
+                            {sortKeys(node.children!).map((k) => (
+                                <li class="tree-item"><TreeNodeEl node={node.children![k]} basePath={`${basePath}/${label}`} /></li>
+                            ))}
+                        </ul>
+                    </details>
+                ) : (
+                    <div class="note">
+                        {path ? <a class={`link ${isActive ? 'active' : ''}`} href={getUrl(path)}>{label}</a> : <span>{label}</span>}
+                    </div>
+                )}
+            </div>
+        );
+    }
+    // Expose as component
+    // @ts-ignore
+    globalThis.TreeNodeEl = Node;
+})()}
+

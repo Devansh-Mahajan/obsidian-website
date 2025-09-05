@@ -1,6 +1,6 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import NotesLayout from '../../layouts/NotesLayout.astro';
 
 export async function getStaticPaths() {
     const notes = await getCollection('notes');
@@ -21,17 +21,22 @@ const computedDescription = note.data.description || 'Study note';
 const { Content } = await render(note);
 ---
 
-<BlogPost
-    {...{
-        title: computedTitle,
-        description: computedDescription,
-        created_date: note.data.created_date ?? null,
-        updated_date: note.data.updated_date ?? null,
-        tags: note.data.tags ?? [],
-        publish: note.data.publish ?? true,
-        no_index: note.data.no_index ?? false,
-    }}
->
+<NotesLayout title={computedTitle} description={computedDescription} currentPath={note.id.replace(/\.[^/.]+$/, '')}>
     <Content />
-    </BlogPost>
+    <hr />
+    <section>
+        <h3>Backlinks</h3>
+        <div id="backlinks"></div>
+    </section>
+</NotesLayout>
+
+<script>
+    const container = document.getElementById('backlinks');
+    fetch('/notes-backlinks.json').then(r => r.ok ? r.json() : {}).then(map => {
+        const key = window.location.pathname.replace(/^\/notes\//, '').replace(/\/$/, '');
+        const items = map[key] || [];
+        if (!items.length) { container.textContent = 'No backlinks yet.'; return; }
+        container.innerHTML = items.map(i => `<div><a class="link" href="/notes/${i.path}">${i.title || i.path}</a></div>`).join('');
+    }).catch(() => { container.textContent = 'No backlinks.'; });
+</script>
 
