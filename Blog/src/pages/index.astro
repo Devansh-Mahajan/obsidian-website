@@ -61,42 +61,62 @@ const posts = (await getCollection('blog'))
 				</div>
 			</section>
 
-			<!-- Areas of Interest -->
-			<section class="interests">
-				<div class="interests-content">
+			<!-- Areas of Focus -->
+			<section class="areas-focus">
+				<div class="areas-content">
 					<h2>Areas of Focus</h2>
-					<div class="interests-grid">
-						<div class="interest-card">
-							<div class="interest-icon">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M12 2L2 7l10 5 10-5-10-5z"/>
-									<path d="M2 17l10 5 10-5"/>
-									<path d="M2 12l10 5 10-5"/>
-								</svg>
+					<p class="areas-description">Core competencies and research interests in computer science and technology.</p>
+					<div class="areas-grid">
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M12 2L2 7l10 5 10-5-10-5z"/>
+										<path d="M2 17l10 5 10-5"/>
+										<path d="M2 12l10 5 10-5"/>
+									</svg>
+								</div>
+								<h3>Algorithms & Data Structures</h3>
 							</div>
-							<h3>Algorithms & Data Structures</h3>
-							<p>Exploring efficient solutions to complex computational problems through rigorous algorithmic thinking.</p>
+							<p>Exploring efficient solutions to complex computational problems through rigorous algorithmic thinking and optimization techniques.</p>
 						</div>
-						<div class="interest-card">
-							<div class="interest-icon">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M3 3h18v18H3zM9 9h6v6H9z"/>
-									<path d="M9 1v6M15 1v6M9 17v6M15 17v6M1 9h6M17 9h6M1 15h6M17 15h6"/>
-								</svg>
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M3 3h18v18H3zM9 9h6v6H9z"/>
+										<path d="M9 1v6M15 1v6M9 17v6M15 17v6M1 9h6M17 9h6M1 15h6M17 15h6"/>
+									</svg>
+								</div>
+								<h3>Mathematics</h3>
 							</div>
-							<h3>Mathematics</h3>
-							<p>Deepening understanding of mathematical foundations, from discrete mathematics to advanced calculus.</p>
+							<p>Deepening understanding of mathematical foundations, from discrete mathematics to advanced calculus and linear algebra.</p>
 						</div>
-						<div class="interest-card">
-							<div class="interest-icon">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-									<line x1="8" y1="21" x2="16" y2="21"/>
-									<line x1="12" y1="17" x2="12" y2="21"/>
-								</svg>
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<circle cx="12" cy="12" r="3"/>
+										<path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+										<path d="M20.2 20.2L16.5 16.5M7.5 7.5L3.8 3.8M20.2 3.8L16.5 7.5M7.5 16.5L3.8 20.2"/>
+									</svg>
+								</div>
+								<h3>Machine Learning & AI</h3>
 							</div>
-							<h3>Software Engineering</h3>
-							<p>Building robust, scalable systems and exploring modern development practices and technologies.</p>
+							<p>Developing intelligent systems and exploring the frontiers of artificial intelligence, neural networks, and data science.</p>
+						</div>
+						<div class="area-card">
+							<div class="area-header">
+								<div class="area-icon">
+									<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+										<line x1="8" y1="21" x2="16" y2="21"/>
+										<line x1="12" y1="17" x2="12" y2="21"/>
+									</svg>
+								</div>
+								<h3>Software Engineering</h3>
+							</div>
+							<p>Building robust, scalable systems and exploring modern development practices, architecture patterns, and technologies.</p>
 						</div>
 					</div>
 				</div>
@@ -262,18 +282,18 @@ const posts = (await getCollection('blog'))
 		opacity: 0.8;
 	}
 
-	.interests {
+	.areas-focus {
 		padding: 6rem 1rem;
 		background: rgba(var(--gray-light), 0.3);
 	}
 
-	.interests-content {
+	.areas-content {
 		max-width: 1200px;
 		margin: 0 auto;
 		text-align: center;
 	}
 
-	.interests h2 {
+	.areas-focus h2 {
 		font-size: 2.5rem;
 		margin-bottom: 1rem;
 		color: rgb(var(--black));
@@ -282,52 +302,70 @@ const posts = (await getCollection('blog'))
 		letter-spacing: -0.02em;
 	}
 
-	.interests-grid {
+	.areas-description {
+		font-size: 1.125rem;
+		color: rgb(var(--gray));
+		margin-bottom: 2rem;
+		max-width: 600px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.areas-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2rem;
-		margin-top: 3rem;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5rem;
+		margin-top: 2rem;
 	}
 
-	.interest-card {
+	.area-card {
 		background: white;
-		padding: 2rem;
-		border-radius: 1rem;
-		text-align: center;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+		padding: 1.5rem;
+		border-radius: 0.75rem;
+		text-align: left;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 		border: 1px solid rgba(var(--gray), 0.1);
-		transition: all 0.3s ease;
+		transition: all 0.2s ease;
 	}
 
-	.interest-card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+	.area-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		border-color: rgba(var(--accent), 0.2);
 	}
 
-	.interest-icon {
-		width: 60px;
-		height: 60px;
-		margin: 0 auto 1.5rem;
+	.area-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1rem;
+	}
+
+	.area-icon {
+		width: 40px;
+		height: 40px;
 		background: rgba(var(--accent), 0.1);
-		border-radius: 1rem;
+		border-radius: 0.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: var(--accent);
+		flex-shrink: 0;
 	}
 
-	.interest-card h3 {
-		font-size: 1.25rem;
-		margin-bottom: 1rem;
+	.area-card h3 {
+		font-size: 1.1rem;
+		margin: 0;
 		color: rgb(var(--black));
 		font-family: var(--font-heading);
 		font-weight: 600;
 	}
 
-	.interest-card p {
+	.area-card p {
 		color: rgb(var(--gray));
 		line-height: 1.6;
 		margin: 0;
+		font-size: 0.9rem;
 	}
 
 	.latest-posts {
@@ -385,21 +423,21 @@ const posts = (await getCollection('blog'))
 			justify-content: center;
 		}
 
-		.interests {
+		.areas-focus {
 			padding: 4rem 1rem;
 		}
 
-		.interests h2 {
+		.areas-focus h2 {
 			font-size: 2rem;
 		}
 
-		.interests-grid {
+		.areas-grid {
 			grid-template-columns: 1fr;
-			gap: 1.5rem;
+			gap: 1rem;
 		}
 
-		.interest-card {
-			padding: 1.5rem;
+		.area-card {
+			padding: 1.25rem;
 		}
 
 		.latest-posts {
