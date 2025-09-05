@@ -172,8 +172,8 @@ async function syncObsidianPosts() {
                         if (entry.name.startsWith('.') || EXCLUDE_NAMES.has(entry.name)) continue;
                     }
                     files = files.concat(await findVaultMarkdown(full));
-                } else if (entry.name.endsWith('.md')) {
-                    // Only include markdown files that are NOT in the vault root
+                } else if (entry.name.endsWith('.md') || entry.name.endsWith('.tex') || entry.name.endsWith('.apkg')) {
+                    // Include markdown, LaTeX, and Anki files that are NOT in the vault root
                     const isInVaultRoot = path.dirname(relFromVault) === '';
                     if (!isInVaultRoot) {
                         files.push(full);
@@ -310,41 +310,92 @@ async function syncObsidianPosts() {
             })
         );
 
-        // Then process markdown files
+        // Then process markdown, LaTeX, and Anki files
         await Promise.all(
             vaultMarkdownFiles.map(async (srcPath) => {
+                const fileExt = path.extname(srcPath).toLowerCase();
                 const destRel = computeDestRelative(srcPath);
                 const destPath = path.join(ASTRO_NOTES_PATH, destRel);
                 await fs.mkdir(path.dirname(destPath), { recursive: true });
-                // Read, parse frontmatter, convert wikilinks, and write
-                const raw = await fs.readFile(srcPath, 'utf8');
-                let fm = {};
-                let body = raw;
-                try {
-                    const parsed = grayMatter(raw);
-                    fm = parsed.data || {};
-                    body = parsed.content || '';
-                } catch {}
-                const outgoing = [];
-                const transformedBody = convertWikiLinks(convertAttachmentLinks(body, attachmentMap), outgoing);
-                const transformed = grayMatter.stringify(transformedBody, fm);
-                await fs.writeFile(destPath, transformed, 'utf8');
-                console.log(`🗒️  Copied note ${path.relative(VAULT_ROOT, srcPath)} → notes/${destRel}`);
+                
+                if (fileExt === '.md') {
+                    // Process markdown files
+                    const raw = await fs.readFile(srcPath, 'utf8');
+                    let fm = {};
+                    let body = raw;
+                    try {
+                        const parsed = grayMatter(raw);
+                        fm = parsed.data || {};
+                        body = parsed.content || '';
+                    } catch {}
+                    const outgoing = [];
+                    const transformedBody = convertWikiLinks(convertAttachmentLinks(body, attachmentMap), outgoing);
+                    const transformed = grayMatter.stringify(transformedBody, fm);
+                    await fs.writeFile(destPath, transformed, 'utf8');
+                    console.log(`🗒️  Copied note ${path.relative(VAULT_ROOT, srcPath)} → notes/${destRel}`);
 
-                // Build search index record
-                const title = (fm.title && String(fm.title)) || path.basename(destRel).replace(/-/g, ' ').replace(/_/g, ' ');
-                const plain = transformedBody
-                    .replace(/```[\s\S]*?```/g, ' ') // strip code blocks
-                    .replace(/`[^`]*`/g, ' ') // strip inline code
-                    .replace(/\!\[[^\]]*\]\([^\)]*\)/g, ' ') // strip images
-                    .replace(/\[[^\]]*\]\([^\)]*\)/g, (m) => m.replace(/\[[^\]]*\]\(/, '').replace(/\)$/, ' ')) // strip link text keep target text minimal
-                    .replace(/[#>*_\-]+/g, ' ') // markdown punctuation
-                    .replace(/\s+/g, ' ') // collapse whitespace
-                    .trim();
-                searchIndex.push({ path: destRel.replace(/\\/g, '/').replace(/\.md$/i, ''), title, content: plain });
+                    // Build search index record
+                    const title = (fm.title && String(fm.title)) || path.basename(destRel).replace(/-/g, ' ').replace(/_/g, ' ');
+                    const plain = transformedBody
+                        .replace(/```[\s\S]*?```/g, ' ') // strip code blocks
+                        .replace(/`[^`]*`/g, ' ') // strip inline code
+                        .replace(/\!\[[^\]]*\]\([^\)]*\)/g, ' ') // strip images
+                        .replace(/\[[^\]]*\]\([^\)]*\)/g, (m) => m.replace(/\[[^\]]*\]\(/, '').replace(/\)$/, ' ')) // strip link text keep target text minimal
+                        .replace(/[#>*_\-]+/g, ' ') // markdown punctuation
+                        .replace(/\s+/g, ' ') // collapse whitespace
+                        .trim();
+                    searchIndex.push({ path: destRel.replace(/\\/g, '/').replace(/\.md$/i, ''), title, content: plain });
 
-                // Record outgoing links
-                outgoingMap.set(destRel.replace(/\\/g, '/').replace(/\.md$/i, ''), new Set(outgoing.map(r => r.replace(/\\/g, '/').replace(/\.md$/i, ''))));
+                    // Record outgoing links
+                    outgoingMap.set(destRel.replace(/\\/g, '/').replace(/\.md$/i, ''), new Set(outgoing.map(r => r.replace(/\\/g, '/').replace(/\.md$/i, ''))));
+                } else if (fileExt === '.tex') {
+                    // Process LaTeX files
+                    const content = await fs.readFile(srcPath, 'utf8');
+                    const title = path.basename(srcPath, '.tex');
+                    const frontmatter = {
+                        title: title,
+                        description: `LaTeX document: ${title}`,
+                        publish: true,
+                        type: 'latex',
+                        created_date: new Date()
+                    };
+                    
+                    const markdownContent = `# ${title}\n\n\`\`\`latex\n${content}\n\`\`\``;
+                    const finalContent = grayMatter.stringify(markdownContent, frontmatter);
+                    
+                    await fs.writeFile(destPath.replace('.tex', '.md'), finalContent, 'utf8');
+                    console.log(`📄 Copied LaTeX ${path.relative(VAULT_ROOT, srcPath)} → notes/${destRel.replace('.tex', '.md')}`);
+                    
+                    // Add to search index
+                    searchIndex.push({ 
+                        path: destRel.replace(/\\/g, '/').replace(/\.tex$/i, ''), 
+                        title, 
+                        content: `LaTeX document ${title}` 
+                    });
+                } else if (fileExt === '.apkg') {
+                    // Process Anki files
+                    const title = path.basename(srcPath, '.apkg');
+                    const frontmatter = {
+                        title: title,
+                        description: `Anki deck: ${title}`,
+                        publish: true,
+                        type: 'anki',
+                        created_date: new Date()
+                    };
+                    
+                    const markdownContent = `# ${title}\n\n## Anki Deck\n\nThis is an Anki flashcard deck. Download the file to import into Anki.\n\n**File:** \`${path.basename(srcPath)}\`\n\n*Note: This deck can be imported into Anki for spaced repetition learning.*`;
+                    const finalContent = grayMatter.stringify(markdownContent, frontmatter);
+                    
+                    await fs.writeFile(destPath.replace('.apkg', '.md'), finalContent, 'utf8');
+                    console.log(`🃏 Copied Anki ${path.relative(VAULT_ROOT, srcPath)} → notes/${destRel.replace('.apkg', '.md')}`);
+                    
+                    // Add to search index
+                    searchIndex.push({ 
+                        path: destRel.replace(/\\/g, '/').replace(/\.apkg$/i, ''), 
+                        title, 
+                        content: `Anki deck ${title}` 
+                    });
+                }
             })
         );
         
