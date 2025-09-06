@@ -1,11 +1,29 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
+import Comments from "./quartz/components/Comments"
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  afterBody: [
+    Comments({
+      provider: "giscus",
+      options: {
+        repo: "Devansh-Mahajan/Obsidian-Website",
+        repoId: "R_kgDOPqqdPQ",
+        category: "General",
+        categoryId: "DIC_kwDOPqqdPc4CvEYH",
+        mapping: "pathname",
+        strict: false,
+        reactionsEnabled: true,
+        inputPosition: "bottom",
+        lightTheme: "light",
+        darkTheme: "dark",
+        lang: "en",
+      },
+    }),
+  ],
   footer: Component.Footer({
     links: {
       GitHub: "https://github.com/jackyzha0/quartz",

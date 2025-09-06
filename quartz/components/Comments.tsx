@@ -31,6 +31,7 @@ export default ((opts: Options) => {
     const disableComment: boolean =
       typeof fileData.frontmatter?.comments !== "undefined" &&
       (!fileData.frontmatter?.comments || fileData.frontmatter?.comments === "false")
+
     if (disableComment) {
       return <></>
     }
@@ -57,6 +58,5 @@ export default ((opts: Options) => {
   }
 
   Comments.afterDOMLoaded = script
-
   return Comments
 }) satisfies QuartzComponentConstructor<Options>
