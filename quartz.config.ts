@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "https://devansh-mahajan.github.io",
+    baseUrl: "https://devansh-mahajan.github.io/Obsidian-Website",
     ignorePatterns: ["private", "templates", ".obsidian", "999 Templates", "900 Todo", "600 Links", "100 Notes", "000 Index", "Blog"],
     defaultDateType: "modified",
     theme: {
