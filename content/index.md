@@ -3,7 +3,7 @@ title: "Devansh Mahajan"
 description: "Study Notes & Projects from my ETH Computer Science Journey"
 ---
 
-# Welcome to My Digital Garden 🌱
+# Devansh Mahajan's Digital Garden 🌱
 
 Hi! I'm **Devansh Mahajan**, a Computer Science student at ETH Zürich. This is my digital knowledge base where I explore the intersection of theory and practice through rigorous study and hands-on projects.
 
