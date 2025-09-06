@@ -47,12 +47,13 @@ export default ((opts: Options) => {
         data-strict={boolToStringBool(opts.options.strict ?? true)}
         data-reactions-enabled={boolToStringBool(opts.options.reactionsEnabled ?? true)}
         data-input-position={opts.options.inputPosition ?? "bottom"}
-        data-light-theme={opts.options.lightTheme ?? "light"}
-        data-dark-theme={opts.options.darkTheme ?? "dark"}
+        data-light-theme={opts.options.lightTheme ?? "github-light"}
+        data-dark-theme={opts.options.darkTheme ?? "github-dark"}
         data-theme-url={
           opts.options.themeUrl ?? `https://${cfg.baseUrl ?? "example.com"}/static/giscus`
         }
         data-lang={opts.options.lang ?? "en"}
+        style="min-height: 200px; margin: 2rem 0;"
       ></div>
     )
   }
