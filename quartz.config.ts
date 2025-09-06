@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Dash's Study Notes",
+    pageTitle: "Devansh Mahajan's Study Notes",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: "devansh-mahajan.github.io",
     ignorePatterns: ["private", "templates", ".obsidian", "999 Templates", "900 Todo", "600 Links", "100 Notes", "000 Index", "Blog"],
     defaultDateType: "modified",
     theme: {
