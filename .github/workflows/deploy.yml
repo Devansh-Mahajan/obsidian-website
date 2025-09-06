@@ -24,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Pull your vault repo alongside the Quartz repo
+      # Pull your vault repo
       - name: Checkout vault content
         uses: actions/checkout@v4
         with:
@@ -38,9 +38,26 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      # Build Quartz from the external vault folder
+      # Debug: show vault structure
+      - name: Show vault files (debug)
+        run: |
+          echo "Vault tree (top level):"
+          ls -la ./vault | head -n 200
+
+      # Sync vault into Quartz's content dir
+      - name: Sync vault -> content
+        run: |
+          rm -rf content/*
+          rsync -av --delete --exclude ".git/" ./vault/ ./content/
+
+      # Debug: confirm content populated
+      - name: Show content after sync (debug)
+        run: |
+          echo "Content tree after sync:"
+          ls -la ./content | head -n 200
+
       - name: Build Quartz
-        run: npx quartz build -d ./vault
+        run: npx quartz build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
