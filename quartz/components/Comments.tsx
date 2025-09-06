@@ -12,12 +12,11 @@ const Comments: QuartzComponent = ({ displayClass, fileData }: QuartzComponentPr
     return <></>
   }
 
-  // Get initial theme for Giscus script
+  // Get initial theme for Giscus script - more robust for production
   const getInitialTheme = () => {
-    if (typeof window !== 'undefined') {
-      return document.documentElement.getAttribute('saved-theme') || 'light';
-    }
-    return 'light'; // fallback for SSR
+    // For SSR/build time, we can't access document, so use a safe default
+    // The JavaScript will handle the actual theme detection at runtime
+    return 'light'; // This will be overridden by the sync script
   }
 
   // Comprehensive theme sync script
@@ -92,12 +91,25 @@ const Comments: QuartzComponent = ({ displayClass, fileData }: QuartzComponentPr
       var currentTheme = syncTheme();
       console.log('Initial theme sync completed:', currentTheme);
       
+      // Force update the script element immediately
+      var giscusScript = document.querySelector('script[src*="giscus.app/client.js"]');
+      if (giscusScript) {
+        giscusScript.setAttribute('data-theme', currentTheme);
+        console.log('Forced script data-theme to:', currentTheme);
+      }
+      
       // Aggressive sync until Giscus loads
       var tries = 0;
-      var maxTries = 200; // Increased tries
+      var maxTries = 300; // Even more tries for production
       var timer = setInterval(function() {
         tries++;
         syncTheme();
+        
+        // Also force update the script element on each try
+        var script = document.querySelector('script[src*="giscus.app/client.js"]');
+        if (script) {
+          script.setAttribute('data-theme', getQuartzTheme());
+        }
         
         var iframe = document.querySelector('iframe.giscus-frame');
         if (iframe || tries > maxTries) {
@@ -107,9 +119,9 @@ const Comments: QuartzComponent = ({ displayClass, fileData }: QuartzComponentPr
           setTimeout(function() {
             syncTheme();
             console.log('Final theme sync completed');
-          }, 200);
+          }, 500); // Longer delay for production
         }
-      }, 20); // Even faster - every 20ms
+      }, 15); // Even faster - every 15ms
       
       // Additional sync triggers
       document.addEventListener('visibilitychange', function() {
@@ -130,24 +142,48 @@ const Comments: QuartzComponent = ({ displayClass, fileData }: QuartzComponentPr
       {/* Immediate theme sync script */}
       <script dangerouslySetInnerHTML={{ __html: themeSyncScript }} />
       
-      {/* Giscus client */}
+      {/* Giscus client with dynamic theme loading */}
       <script
-        src="https://giscus.app/client.js"
-        data-repo="Devansh-Mahajan/Obsidian-Website"
-        data-repo-id="R_kgDOPqqdPQ"
-        data-category="General"
-        data-category-id="DIC_kwDOPqqdPc4CvEYH"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme={getInitialTheme()}
-        data-lang="en"
-        data-loading="lazy"
-        crossOrigin="anonymous"
-        async
-      ></script>
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              // Get the current theme immediately
+              function getCurrentTheme() {
+                var savedTheme = document.documentElement.getAttribute('saved-theme');
+                if (savedTheme) return savedTheme;
+                if (document.documentElement.classList.contains('dark')) return 'dark';
+                if (document.documentElement.classList.contains('light')) return 'light';
+                return 'light';
+              }
+              
+              // Create and configure the Giscus script
+              var script = document.createElement('script');
+              script.src = 'https://giscus.app/client.js';
+              script.setAttribute('data-repo', 'Devansh-Mahajan/Obsidian-Website');
+              script.setAttribute('data-repo-id', 'R_kgDOPqqdPQ');
+              script.setAttribute('data-category', 'General');
+              script.setAttribute('data-category-id', 'DIC_kwDOPqqdPc4CvEYH');
+              script.setAttribute('data-mapping', 'pathname');
+              script.setAttribute('data-strict', '0');
+              script.setAttribute('data-reactions-enabled', '1');
+              script.setAttribute('data-emit-metadata', '0');
+              script.setAttribute('data-input-position', 'bottom');
+              script.setAttribute('data-theme', getCurrentTheme());
+              script.setAttribute('data-lang', 'en');
+              script.setAttribute('data-loading', 'lazy');
+              script.crossOrigin = 'anonymous';
+              script.async = true;
+              
+              // Append to the giscus container
+              var container = document.querySelector('.giscus');
+              if (container) {
+                container.appendChild(script);
+                console.log('Giscus script loaded with theme:', getCurrentTheme());
+              }
+            })();
+          `
+        }}
+      />
     </section>
   )
 }
