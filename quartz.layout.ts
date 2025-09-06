@@ -7,22 +7,7 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [
-    Comments({
-      provider: "giscus",
-      options: {
-        repo: "Devansh-Mahajan/Obsidian-Website",
-        repoId: "R_kgDOPqqdPQ",
-        category: "General",
-        categoryId: "DIC_kwDOPqqdPc4CvEYH",
-        mapping: "pathname",
-        strict: false,
-        reactionsEnabled: true,
-        inputPosition: "bottom",
-        lightTheme: "github-light",
-        darkTheme: "github-dark",
-        lang: "en",
-      },
-    }),
+    Comments,
   ],
   footer: Component.Footer({
     links: {
