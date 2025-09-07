@@ -17,7 +17,17 @@ const config: QuartzConfig = {
     },
     locale: "en-US",
     baseUrl: "https://devansh-mahajan.github.io/Obsidian-Website",
-    ignorePatterns: ["private", "templates", ".obsidian", "999 Templates", "900 Todo", "600 Links", "100 Notes", "000 Index", "Blog"],
+    ignorePatterns: [
+      "private",
+      "templates",
+      ".obsidian",
+      "999 Templates",
+      "900 Todo",
+      "600 Links",
+      "100 Notes",
+      "000 Index",
+      "Blog",
+    ],
     defaultDateType: "modified",
     theme: {
       fontOrigin: "googleFonts",
@@ -40,13 +50,13 @@ const config: QuartzConfig = {
           textHighlight: "#fff3cd",
         },
         darkMode: {
-          light: "#1a1a1a",        // dark background like in image
-          lightgray: "#2d2d2d",    // slightly lighter dark
-          gray: "#404040",         // medium grey
-          darkgray: "#e0e0e0",     // light text
-          dark: "#ffffff",         // white text
-          secondary: "#ff6b6b",    // red like headings in image
-          tertiary: "#ffa726",     // orange like accents in image
+          light: "#1a1a1a", // dark background like in image
+          lightgray: "#2d2d2d", // slightly lighter dark
+          gray: "#404040", // medium grey
+          darkgray: "#e0e0e0", // light text
+          dark: "#ffffff", // white text
+          secondary: "#ff6b6b", // red like headings in image
+          tertiary: "#ffa726", // orange like accents in image
           highlight: "rgba(255, 107, 107, 0.15)", // red highlight
           textHighlight: "#fff3cd", // light orange highlight
         },
@@ -88,8 +98,6 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages(),
     ],
   },
 }

@@ -6,9 +6,7 @@ import Comments from "./quartz/components/Comments"
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [
-    Comments,
-  ],
+  afterBody: [Comments],
   footer: Component.Footer({
     links: {
       GitHub: "https://github.com/jackyzha0/quartz",

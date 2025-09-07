@@ -2,7 +2,7 @@ name: Deploy Quartz site to GitHub Pages
 
 on:
   push:
-    branches: [ v4 ]
+    branches: [v4]
   workflow_dispatch:
   repository_dispatch:
     types: [vault-updated]
