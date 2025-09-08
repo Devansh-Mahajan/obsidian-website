@@ -20,19 +20,19 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       # Pull your vault repo
       - name: Checkout vault content
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: Devansh-Mahajan/My-Website
           ref: main
           path: vault
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - name: Install Dependencies
@@ -60,7 +60,7 @@ jobs:
         run: npx quartz build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: public
 
